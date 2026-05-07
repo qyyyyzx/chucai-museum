@@ -158,3 +158,31 @@ H5 开发用 mock（`src/platform/mock/`），小程序用云函数（`cloudfunc
 | `src/shared/llm.md` | AI | 通用层约束 |
 | `src/pages/llm.md` | AI | 页面与模块归属 |
 | `cloudfunctions/llm.md` | AI | 云函数约束、两端同步要求 |
+## 开发环境设置
+
+1. 克隆仓库  
+   `git clone git@github.com:qyyyyzx/chucai-museum.git`
+2. 进入目录并安装依赖  
+   `cd chucai-museum && npm install`
+3. 启动 H5 开发服务器  
+   `npm run dev:h5`
+4. 构建微信小程序  
+   `npm run build:mp-weixin`，然后用微信开发者工具导入 `dist/build/mp-weixin` 目录
+
+## 规范提示
+
+- **代码与文档同步**：任何 `src/` 下新增或修改 `.js` 文件，必须同步创建或更新 `docs/modules/同名.md`，否则 `git commit` 会被 pre-commit hook 拦截。
+- **提交信息格式**：`[type][author] 内容`，type 可选：feat / fix / docs / test / chore 等。
+- **分支命名**：`feat/xxx`、`fix/xxx`、`docs/xxx`。
+
+## 如何贡献
+
+1. 从最新的 `main` 拉分支：`git checkout -b feat/your-feature`
+2. 编写代码，同步更新文档，运行 `npm test` 确保通过
+3. 推送到你的 fork 或直接推送到你的分支（如果有权限）并创建 Pull Request
+4. 等待 CI 通过并请求 review
+
+## 相关文档
+
+- AI 规范详见 [`CLAUDE.md`](./CLAUDE.md)
+- 模块文档位于 `docs/modules/`
