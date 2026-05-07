@@ -1,0 +1,18 @@
+{
+  "name": "chucai-museum",
+  "version": "1.0.0",
+  "description": "楚菜文化数字博物馆微信小程序",
+  "scripts": {
+    "dev:h5": "uni -p h5",
+    "build:h5": "uni build -p h5",
+    "dev:mp-weixin": "uni -p mp-weixin",
+    "build:mp-weixin": "uni build -p mp-weixin",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "prepare": "husky"
+  },
+  "devDependencies": {
+    "husky": "^9.0.0",
+    "vitest": "^1.0.0"
+  }
+}
