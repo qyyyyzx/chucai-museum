@@ -11,8 +11,18 @@
     "test:watch": "vitest",
     "prepare": "husky"
   },
+  "dependencies": {
+    "@dcloudio/uni-app": "vue3",
+    "@dcloudio/uni-components": "vue3",
+    "@dcloudio/uni-h5": "vue3",
+    "@dcloudio/uni-mp-weixin": "vue3",
+    "@dcloudio/uni-ui": "latest",
+    "@dcloudio/vite-plugin-uni": "vue3",
+    "vue": "^3.5.0"
+  },
   "devDependencies": {
     "husky": "^9.0.0",
+    "jsdom": "^29.1.1",
     "vitest": "^1.0.0"
   }
 }

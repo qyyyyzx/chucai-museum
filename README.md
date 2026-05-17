@@ -90,6 +90,8 @@ chucai-museum/
 │   │   ├── utils/
 │   │   └── llm.md
 │   ├── pages/                            # uni-app 路由入口
+│   │   ├── exhibit/                      # 展陈页面
+│   │   │   └── list.vue                  # 菜品/名厨列表
 │   │   └── llm.md
 │   ├── App.vue
 │   ├── main.js
@@ -104,6 +106,9 @@ chucai-museum/
 │   └── modules/
 │
 ├── docs/
+│   ├── task-division.md                  # 团队分工指南
+│   ├── progress.md                       # 开发进度追踪
+│   └── c2-exhibit-list-plan.md           # C2 任务拆分
 │
 ├── vite.config.js
 ├── vitest.config.js

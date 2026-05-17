@@ -1,0 +1,16 @@
+{
+  "pages": [
+    {
+      "path": "pages/exhibit/list",
+      "style": {
+        "navigationBarTitleText": "楚菜展陈"
+      }
+    }
+  ],
+  "globalStyle": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "楚菜文化数字博物馆",
+    "navigationBarBackgroundColor": "#ffffff",
+    "backgroundColor": "#f5f5f5"
+  }
+}
