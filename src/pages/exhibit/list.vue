@@ -17,6 +17,12 @@
       </view>
     </view>
 
+    <!-- 加载状态提示 -->
+    <view v-if="isRefreshing" class="refresh-tip">
+      <uni-icons type="refresh" size="20" color="#2979ff" />
+      <text class="refresh-text">正在刷新...</text>
+    </view>
+
     <view v-if="currentList.length > 0" class="list-wrap">
       <uni-list>
         <uni-list-item
@@ -51,6 +57,7 @@ export default {
   data() {
     return {
       activeTab: 'dish',
+      isRefreshing: false,
       dishes: [
         {
           id: 1,
@@ -167,11 +174,37 @@ export default {
       return this.activeTab === 'dish' ? this.dishes : this.chefs
     }
   },
+  onPullDownRefresh() {
+    this.refreshData()
+  },
   methods: {
     goDetail(id) {
       uni.navigateTo({
         url: `/pages/exhibit/detail?id=${id}`
       })
+    },
+    async refreshData() {
+      this.isRefreshing = true
+
+      try {
+        // 模拟网络请求延迟
+        await new Promise(resolve => setTimeout(resolve, 1000))
+
+        // 这里后续会替换为真实的API调用
+        // 目前使用硬编码数据，刷新时重新加载
+        uni.showToast({
+          title: '刷新成功',
+          icon: 'success'
+        })
+      } catch (error) {
+        uni.showToast({
+          title: '刷新失败',
+          icon: 'none'
+        })
+      } finally {
+        this.isRefreshing = false
+        uni.stopPullDownRefresh()
+      }
     }
   }
 }
@@ -215,6 +248,20 @@ export default {
   height: 6rpx;
   background-color: #2979ff;
   border-radius: 3rpx;
+}
+
+.refresh-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20rpx 0;
+  background-color: #e8f4ff;
+}
+
+.refresh-text {
+  margin-left: 10rpx;
+  font-size: 28rpx;
+  color: #2979ff;
 }
 
 .list-wrap {

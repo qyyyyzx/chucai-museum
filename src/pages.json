@@ -3,7 +3,8 @@
     {
       "path": "pages/exhibit/list",
       "style": {
-        "navigationBarTitleText": "楚菜展陈"
+        "navigationBarTitleText": "楚菜展陈",
+        "enablePullDownRefresh": true
       }
     }
   ],

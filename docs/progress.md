@@ -11,7 +11,7 @@
 | Step 1：创建页面 + 注册路由 | 已完成 | `src/pages/exhibit/list.vue` + `src/pages.json` |
 | Step 2：数据结构 + mock 数据 | 待开始 | 依赖 C1、D1 |
 | Step 3：列表展示 UI | 已完成 | tab 切换 + uni-list + 10 道菜品 + 5 位名厨硬编码数据 |
-| Step 4：下拉刷新 | 待开始 | |
+| Step 4：下拉刷新 | 已完成 | `onPullDownRefresh` + `refreshData` + 加载状态提示 + 7个测试用例 |
 | Step 5：上拉加载更多 | 待开始 | 依赖 Step 2 分页接口 |
 | Step 6：点击跳转详情 | 待开始 | 需 C3 详情页或占位页 |
 
