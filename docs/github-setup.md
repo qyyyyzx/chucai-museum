@@ -89,6 +89,7 @@ jobs:
           script: |
             const pr = context.payload.pull_request;
             const title = pr.title;
+            const body = pr.body || '';
             const labels = [];
 
             // 根据PR标题自动添加标签
@@ -101,8 +102,12 @@ jobs:
             else if (title.startsWith('[chore]')) labels.push('chore');
 
             // 检查是否有Breaking Changes
-            const body = pr.body || '';
-            if (body.includes('Breaking Changes') && !body.includes('- [x] 无Breaking Changes')) {
+            // 检查模板中的checkbox："[x] 本次改动有Breaking Changes"
+            const hasBreakingChanges = body.includes('[x] 本次改动有Breaking Changes');
+            // 检查是否没有选择"无Breaking Changes"
+            const noBreakingChanges = body.includes('[x] 本次改动无Breaking Changes');
+
+            if (hasBreakingChanges && !noBreakingChanges) {
               labels.push('breaking-change');
             }
 
@@ -207,14 +212,23 @@ jobs:
             else sizeLabel = 'size/XL';
 
             // 移除旧的size标签
-            const labels = pr.labels.map(l => l.name).filter(l => l.startsWith('size/'));
-            for (const label of labels) {
-              await github.rest.issues.removeLabel({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: pr.number,
-                name: label
-              });
+            const currentLabels = pr.labels || [];
+            const sizeLabels = currentLabels
+              .map(l => l.name)
+              .filter(l => l.startsWith('size/'));
+
+            for (const label of sizeLabels) {
+              try {
+                await github.rest.issues.removeLabel({
+                  owner: context.repo.owner,
+                  repo: context.repo.repo,
+                  issue_number: pr.number,
+                  name: label
+                });
+              } catch (error) {
+                // 标签不存在时忽略错误
+                console.log(`Label ${label} not found, skipping removal`);
+              }
             }
 
             // 添加新的size标签

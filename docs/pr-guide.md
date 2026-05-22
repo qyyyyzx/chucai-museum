@@ -101,6 +101,8 @@ git push origin feat/your-feature-name
 - `[fix] 修复详情页图片加载失败问题`
 - `[docs] 更新API接口文档`
 
+注意：PR标题不需要包含author信息（与commit message不同），因为GitHub会自动记录PR创建者。
+
 ### 3.4 PR描述规范
 
 使用项目提供的PR模板，确保包含：
@@ -181,7 +183,7 @@ PR创建后，CI会自动运行以下检查：
 ### 5.3 CI状态要求
 
 - **所有CI检查必须通过**才能合并
-- 如果CI检查与本次改动无关，可以与Reviewer沟通后强制合并
+- 如果CI检查失败但与本次改动无关，应先修复CI问题，或在PR中说明原因并获得Reviewer批准
 
 ---
 
@@ -294,9 +296,23 @@ git push origin feat/your-feature
 根据项目规范，`dev/<name>` 分支**不得直接MR到 `main`**。
 
 正确流程：
-1. 从 `dev/<name>` 拉取 `feat/<slug>` 分支
-2. 在 `feat/<slug>` 上完成开发
-3. 通过 `feat/<slug>` 创建PR到 `main`
+```bash
+# 1. 确保dev分支是最新的
+git checkout dev/wqh
+git pull origin dev/wqh
+
+# 2. 从dev分支创建feat分支
+git checkout -b feat/your-feature-name
+
+# 3. 在feat分支上完成开发并提交
+git add .
+git commit -m "[feat][author] 你的改动说明"
+
+# 4. 推送feat分支
+git push origin feat/your-feature-name
+
+# 5. 在GitHub上创建PR，目标分支选择 main
+```
 
 ---
 
@@ -304,16 +320,23 @@ git push origin feat/your-feature
 
 创建PR前，确认以下事项：
 
-- [ ] 已从最新的 `main` 拉取分支
-- [ ] 分支命名符合规范
+### 必须完成项
+- [ ] 分支命名符合规范（`feat/xxx`、`fix/xxx` 等）
+- [ ] 已确保分支是最新的（从main或dev分支拉取后，已rebase/merge最新main）
+- [ ] 已解决所有合并冲突（创建PR时和合并前都需要检查）
 - [ ] commit message符合 `[type][author] 内容` 格式
-- [ ] 本地 `npm test` 通过
+- [ ] 本地 `npm test` 全部通过
 - [ ] 本地 `npm run build:h5` 通过
-- [ ] 已检查无emoji和装饰性符号
-- [ ] 已检查无原生input/textarea
-- [ ] 已同步更新相关文档
-- [ ] PR模板填写完整
-- [ ] 已关联相关Issue（如果有）
+- [ ] 已检查无emoji和装饰性符号（运行 `grep -rP '[●✓✗★☆→←↑↓▲▼◆◇■□◉◎♥♡⚠⚡]' src`）
+- [ ] 已检查无原生input/textarea（运行 `grep -r "<input\|<textarea" src`）
+- [ ] 已同步更新相关文档（src/modules/*/llm.md、src/pages/llm.md、src/platform/llm.md、src/shared/llm.md）
+- [ ] PR模板所有必填项已填写
+- [ ] 已关联相关Issue（使用 `Closes #xxx` 或 `Relates to #xxx`，或说明无关联原因）
+
+### 推荐完成项
+- [ ] 已在H5模式下手动测试UI变更
+- [ ] 已添加测试截图（如有UI变更）
+- [ ] 已检查影响范围，列出涉及的模块
 
 ---
 
