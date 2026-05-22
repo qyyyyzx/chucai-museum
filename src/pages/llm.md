@@ -35,6 +35,7 @@
 - 页面中禁止使用原生 `<input>` / `<textarea>`，必须使用 `<uni-easyinput>`
 - 页面中禁止出现 emoji 或装饰性 Unicode 符号
 - `reLaunch` / `switchTab` 进入的页面必须有可见的"退出"按钮
+- 下拉刷新使用 uni-app 的 `onPullDownRefresh` 生命周期，必须调用 `uni.stopPullDownRefresh()` 停止刷新
 
 ## Tests
 

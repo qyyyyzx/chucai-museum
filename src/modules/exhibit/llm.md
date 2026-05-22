@@ -45,6 +45,7 @@ ExhibitItem {
 - 列表页（C2）的 mock 数据目前硬编码在页面内，待 D1 完成后迁移到 `platform/mock/`
 - 菜品和名厨共用同一数据结构，通过 `type` 字段区分
 - 所有页面使用 uni-ui 组件，禁止 emoji
+- 列表页支持下拉刷新（`onPullDownRefresh`），刷新时显示加载状态提示
 
 ## Tests
 
