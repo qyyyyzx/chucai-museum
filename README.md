@@ -191,3 +191,4 @@ H5 开发用 mock（`src/platform/mock/`），小程序用云函数（`cloudfunc
 
 - AI 规范详见 [`CLAUDE.md`](./CLAUDE.md)
 - 模块文档位于 `docs/modules/`
+- PR流程指南详见 [`docs/pr-guide.md`](./docs/pr-guide.md)

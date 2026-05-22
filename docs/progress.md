@@ -1,6 +1,6 @@
 # 楚菜文化数字博物馆 - 开发进度
 
-> 最后更新：2026-05-17
+> 最后更新：2026-05-22
 
 ## 当前分支：dev/wqh
 
@@ -35,6 +35,14 @@
 | `src/modules/exhibit/llm.md` | 已创建 |
 | `src/platform/llm.md` | 已创建 |
 | `src/shared/llm.md` | 已创建 |
+
+## PR流程
+
+| 项目 | 状态 | 说明 |
+|------|------|------|
+| PR模板 | 已完善 | `.github/PULL_REQUEST_TEMPLATE.md` |
+| CI流水线 | 已启用 | test + build-h5 + build-mp-weixin |
+| PR流程指南 | 已创建 | `docs/pr-guide.md` |
 
 ## 待确认事项
 
