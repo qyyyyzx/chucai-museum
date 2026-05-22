@@ -7,7 +7,7 @@
 ## 1. PR流程概览
 
 ```
-1. 从 main 拉取新分支
+1. 从 main（或 dev）拉取新分支
      ↓
 2. 在分支上开发
      ↓
@@ -15,7 +15,7 @@
      ↓
 4. 推送分支到远程
      ↓
-5. 创建 PR
+5. 创建 PR（目标分支为 main）
      ↓
 6. Code Review
      ↓
@@ -24,17 +24,31 @@
 8. 合并到 main
 ```
 
+注意：`dev/<name>` 分支不得直接PR到 `main`，必须通过 `feat/<slug>` 等分支。
+
 ---
 
 ## 2. 创建PR前的准备
 
 ### 2.1 确保分支是最新的
 
+**方式一：从 main 分支创建（推荐）**
 ```bash
 # 拉取最新的 main 分支
 git fetch origin
 git checkout main
 git pull --ff-only
+
+# 创建新分支
+git checkout -b feat/your-feature-name
+```
+
+**方式二：从 dev 分支创建**
+```bash
+# 拉取最新的 dev 分支
+git fetch origin
+git checkout dev/your-name
+git pull origin dev/your-name
 
 # 创建新分支
 git checkout -b feat/your-feature-name
@@ -211,6 +225,14 @@ git checkout main
 git pull --ff-only
 ```
 
+4. 如果需要，更新本地dev分支
+
+```bash
+git checkout dev/your-name
+git merge main
+git push origin dev/your-name
+```
+
 ---
 
 ## 7. Branch Protection Rules
@@ -233,7 +255,9 @@ git pull --ff-only
    - 启用
 
 5. **Do not allow bypassing the above settings**
-   - 根据团队需求决定
+   - 启用：管理员也无法绕过保护规则，更安全
+   - 禁用：管理员可以紧急情况下绕过规则
+   - 建议：个人项目可禁用，团队项目建议启用
 
 ### 7.2 分支命名规范
 
@@ -291,7 +315,14 @@ git push origin feat/your-feature
 1. 在PR页面点击 "Close pull request"
 2. 如果需要重新创建，可以重新打开或创建新的PR
 
-### 8.4 dev分支可以直接PR到main吗？
+### 8.4 CI检查失败但与本次改动无关怎么办？
+
+1. 查看CI日志，确认失败原因
+2. 如果是已知问题（如环境问题、依赖问题），在PR中说明
+3. 请求Reviewer批准合并，或先修复CI问题再合并
+4. **不能**直接绕过CI检查
+
+### 8.5 dev分支可以直接PR到main吗？
 
 根据项目规范，`dev/<name>` 分支**不得直接MR到 `main`**。
 
@@ -329,6 +360,7 @@ git push origin feat/your-feature-name
 - [ ] 本地 `npm run build:h5` 通过
 - [ ] 已检查无emoji和装饰性符号（运行 `grep -rP '[●✓✗★☆→←↑↓▲▼◆◇■□◉◎♥♡⚠⚡]' src`）
 - [ ] 已检查无原生input/textarea（运行 `grep -r "<input\|<textarea" src`）
+- [ ] 已检查是否有Breaking Changes，并在PR模板中说明
 - [ ] 已同步更新相关文档（src/modules/*/llm.md、src/pages/llm.md、src/platform/llm.md、src/shared/llm.md）
 - [ ] PR模板所有必填项已填写
 - [ ] 已关联相关Issue（使用 `Closes #xxx` 或 `Relates to #xxx`，或说明无关联原因）
