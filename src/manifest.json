@@ -1,0 +1,21 @@
+{
+  "name": "楚菜文化数字博物馆",
+  "appid": "",
+  "description": "楚菜文化数字博物馆微信小程序",
+  "versionName": "1.0.0",
+  "versionCode": "100",
+  "transformPx": false,
+  "h5": {
+    "title": "楚菜文化数字博物馆",
+    "router": {
+      "mode": "hash"
+    }
+  },
+  "mp-weixin": {
+    "appid": "",
+    "setting": {
+      "urlCheck": false
+    },
+    "usingComponents": true
+  }
+}

@@ -90,6 +90,8 @@ chucai-museum/
 │   │   ├── utils/
 │   │   └── llm.md
 │   ├── pages/                            # uni-app 路由入口
+│   │   ├── exhibit/                      # 展陈页面
+│   │   │   └── list.vue                  # 菜品/名厨列表
 │   │   └── llm.md
 │   ├── App.vue
 │   ├── main.js
@@ -104,6 +106,9 @@ chucai-museum/
 │   └── modules/
 │
 ├── docs/
+│   ├── task-division.md                  # 团队分工指南
+│   ├── progress.md                       # 开发进度追踪
+│   └── c2-exhibit-list-plan.md           # C2 任务拆分
 │
 ├── vite.config.js
 ├── vitest.config.js
@@ -186,3 +191,4 @@ H5 开发用 mock（`src/platform/mock/`），小程序用云函数（`cloudfunc
 
 - AI 规范详见 [`CLAUDE.md`](./CLAUDE.md)
 - 模块文档位于 `docs/modules/`
+- PR流程指南详见 [`docs/pr-guide.md`](./docs/pr-guide.md)
