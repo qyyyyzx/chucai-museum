@@ -8,7 +8,7 @@
       </view>
       <view class="demo-item">
         <text class="demo-label">自定义文案</text>
-        <exit-button text="返回上一页" type="navigateBack" />
+        <exit-button text="返回上一页" action="navigateBack" />
       </view>
     </view>
 

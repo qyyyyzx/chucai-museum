@@ -6,6 +6,8 @@
 
 解决 vue3 + uni-app 5.07 H5 模式下，`onLoad(options)` 收到的 options 可能不包含 query 参数的问题。
 
+**环境支持**：使用纯 JavaScript 实现，不依赖浏览器 API（如 URLSearchParams），支持 H5、小程序、Node.js 等所有环境。
+
 ## 函数
 
 ### pickRouteParam(options, key)

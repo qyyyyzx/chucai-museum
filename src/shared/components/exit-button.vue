@@ -19,7 +19,7 @@ export default {
       type: String,
       default: '/pages/index/index'
     },
-    type: {
+    action: {
       type: String,
       default: 'switchTab',
       validator: (value) => ['switchTab', 'reLaunch', 'navigateBack'].includes(value)
@@ -27,9 +27,9 @@ export default {
   },
   methods: {
     handleExit() {
-      if (this.type === 'navigateBack') {
+      if (this.action === 'navigateBack') {
         uni.navigateBack()
-      } else if (this.type === 'reLaunch') {
+      } else if (this.action === 'reLaunch') {
         uni.reLaunch({ url: this.url })
       } else {
         uni.switchTab({ url: this.url })

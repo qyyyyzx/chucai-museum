@@ -1,5 +1,12 @@
 import { describe, it, expect, vi } from 'vitest'
-import { blobToDataURL } from '@/shared/utils/image-encode.js'
+import { blobToDataURL, isBlobToDataURLSupported } from '@/shared/utils/image-encode.js'
+
+describe('isBlobToDataURLSupported', () => {
+  it('在 Vitest 环境中返回 true', () => {
+    // Vitest 模拟了浏览器环境，应该支持
+    expect(isBlobToDataURLSupported()).toBe(true)
+  })
+})
 
 describe('blobToDataURL', () => {
   it('dataURL 直接返回', async () => {
