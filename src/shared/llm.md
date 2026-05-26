@@ -20,13 +20,13 @@
 | `utils/route-query.js` | `pickRouteParam(options, key)` | 安全获取路由参数，解决 H5 query 丢失问题 |
 | `utils/image-encode.js` | `blobToDataURL(blob)` | blob URL 转 base64 dataURL，解决跨页面失效问题 |
 
-### 通用组件（待 A3 实现）
+### 通用组件（A3 已实现）
 
-| 组件 | 说明 |
-|------|------|
-| 退出/返回按钮 | 用于 reLaunch/switchTab 进入的页面 |
-| 加载状态组件 | 页面级 loading |
-| 错误提示组件 | 统一错误展示 |
+| 组件 | 文件 | 说明 |
+|------|------|------|
+| 退出/返回按钮 | `components/exit-button.vue` | 用于 reLaunch/switchTab 进入的页面 |
+| 加载状态组件 | `components/loading-state.vue` | 页面级 loading |
+| 错误提示组件 | `components/error-message.vue` | 统一错误展示 |
 
 ## Invariants
 

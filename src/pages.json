@@ -6,6 +6,12 @@
         "navigationBarTitleText": "楚菜展陈",
         "enablePullDownRefresh": true
       }
+    },
+    {
+      "path": "pages/shared/components-demo",
+      "style": {
+        "navigationBarTitleText": "通用组件示例"
+      }
     }
   ],
   "globalStyle": {
