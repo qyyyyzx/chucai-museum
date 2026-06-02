@@ -28,17 +28,52 @@
 | `getExhibitList(type, page, pageSize)` | `type: 'dish'\|'chef'` | `{ list: ExhibitItem[], total: number }` | 分页获取展品列表 |
 | `getExhibitDetail(id)` | `id: number` | `ExhibitItem` | 获取展品详情 |
 
-### 数据模型（待 C1 定义后更新）
+### 数据模型（C1 已定义）
+
+所有模型定义在 `domain/` 目录，通过工厂函数创建，配套验证函数。
+
+| 文件 | 模型 | 必填字段 | 说明 |
+|------|------|----------|------|
+| `domain/dish.js` | Dish | `name` | 菜品：名称、图片、历史、做法、食材 |
+| `domain/chef.js` | Chef | `name` | 名厨：姓名、照片、简介、代表菜 |
+| `domain/historical-period.js` | HistoricalPeriod | `dynasty` | 历史时期：朝代、特点、代表菜 |
+| `domain/exhibit-item.js` | ExhibitItem | `id, name, type` | 统一展品列表项，Dish/Chef 通过 `toExhibitItem()` 转换 |
 
 ```
+Dish {
+  id: number
+  name: string          // 必填
+  image: string
+  history: string
+  method: string
+  ingredients: string[]
+}
+
+Chef {
+  id: number
+  name: string          // 必填
+  photo: string
+  bio: string
+  signatureDishes: string[]
+}
+
+HistoricalPeriod {
+  id: number
+  dynasty: string       // 必填
+  characteristics: string
+  representativeDishes: string[]
+}
+
 ExhibitItem {
   id: number
   name: string
-  summary: string
+  summary: string       // 截取自 history/bio 前 80 字符
   image: string
   type: 'dish' | 'chef'
 }
 ```
+
+验证函数导出 `{ valid: boolean, errors: string[] }`，不抛异常。
 
 ## Invariants
 
