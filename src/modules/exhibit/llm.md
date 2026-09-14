@@ -28,29 +28,59 @@
 | `getExhibitList(type, page, pageSize)` | `type: 'dish'\|'chef'` | `{ list: ExhibitItem[], total: number }` | 分页获取展品列表 |
 | `getExhibitDetail(id)` | `id: number` | `ExhibitItem` | 获取展品详情 |
 
-### 数据模型（待 C1 定义后更新）
+### 数据模型（C1 已完成，位于 `src/modules/exhibit/domain/`）
 
 ```
-ExhibitItem {
-  id: number
-  name: string
-  summary: string
-  image: string
-  type: 'dish' | 'chef'
+ExhibitItem {           // 列表用精简结构，见 exhibit-item.js
+  id: number            // 展品唯一标识
+  name: string          // 展品名称
+  summary: string       // 简介摘要
+  image: string         // 封面图片 URL
+  type: 'dish'|'chef'   // 展品类型：菜品或名厨
+}
+
+Dish {                  // 菜品详情结构，见 dish.js
+  id: number            // 菜品唯一标识
+  name: string          // 菜品名称
+  image: string         // 菜品图片 URL
+  history: string       // 历史背景介绍
+  technique: string     // 烹饪做法描述
+  ingredients: string[] // 食材列表
+}
+
+Chef {                  // 名厨详情结构，见 chef.js
+  id: number            // 名厨唯一标识
+  name: string          // 名厨姓名
+  photo: string         // 名厨照片 URL
+  bio: string           // 个人简介
+  signatureDishes: string[] // 代表菜名称列表
+}
+
+Period {                // 历史时期结构（最小版本），见 period.js
+  id: number            // 历史时期唯一标识
+  name: string          // 朝代或时期名称
+  characteristics: string   // 该时期楚菜的主要特点
+  representativeDishes: string[] // 该时期代表菜名称列表
 }
 ```
+
+**说明**：
+- `ExhibitItem` 用于列表页，只包含少量字段
+- `Dish` / `Chef` 用于详情页，包含完整字段
+- `Period` 为最小版本，暂无页面，后续有需求再扩展
+- C4 扩展字段（story、storyImages 等）由 C4 负责人在 `Dish` 上自行扩展
 
 ## Invariants
 
 - 列表页（C2）的 mock 数据目前硬编码在页面内，待 D1 完成后迁移到 `platform/mock/`
-- 菜品和名厨共用同一数据结构，通过 `type` 字段区分
+- 菜品和名厨在列表层面共用 `ExhibitItem` 结构，通过 `type` 字段区分
 - 所有页面使用 uni-ui 组件，禁止 emoji
 - 列表页支持下拉刷新（`onPullDownRefresh`），刷新时显示加载状态提示
 
 ## Tests
 
 - 展示逻辑（列表渲染、tab 切换）通过浏览器手动验证
-- 数据模型验证函数需写单测（C1 负责）
+- 数据模型验证函数单测位于 `tests/modules/exhibit/domain.test.js`（C1 已完成）
 
 ## Change Protocol
 
