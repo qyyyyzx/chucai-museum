@@ -11,6 +11,7 @@
  */
 
 import * as socialMock from './mock/social.js';
+import * as lbsMock from './mock/lbs.js';
 
 /**
  * 判断当前是否 H5 环境（有 localStorage）
@@ -65,5 +66,22 @@ export const socialApi = {
       return socialMock.deleteCheckinRecord(id);
     }
     cloudNotReady('deleteCheckinRecord');
+  },
+};
+
+/**
+ * LBS 地理位置域接口
+ */
+export const lbsApi = {
+  /**
+   * 按时辰时段查询餐厅列表
+   * @param {string} [timeSlot] - 时辰时段标识（zi/chou/.../hai）；不传则返回全量数据
+   * @returns {{ list: Restaurant[], total: number }} 查询结果
+   */
+  getRestaurantsByTimeSlot(timeSlot) {
+    if (isH5()) {
+      return lbsMock.getRestaurantsByTimeSlot(timeSlot);
+    }
+    cloudNotReady('getRestaurantsByTimeSlot');
   },
 };
