@@ -17,6 +17,9 @@
 
 | 方法 | 状态 | 说明 |
 |------|------|------|
+| `socialApi.saveCheckinRecord(record)` | mock 已实现（H5），云函数待 D2 | F1 打卡记录保存（localStorage 持久化） |
+| `socialApi.getCheckinRecords()` | mock 已实现（H5），云函数待 D2 | F1 打卡记录列表（按时间倒序） |
+| `socialApi.deleteCheckinRecord(id)` | mock 已实现（H5），云函数待 D2 | F1 删除打卡记录 |
 | `getExhibitList()` | 待实现 | C2 依赖 |
 | `getExhibitDetail()` | 待实现 | C3 依赖 |
 | `getRestaurantsByTimeSlot()` | 待实现 | H2 依赖 |

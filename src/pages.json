@@ -12,6 +12,12 @@
       "style": {
         "navigationBarTitleText": "通用组件示例"
       }
+    },
+    {
+      "path": "pages/social/checkin",
+      "style": {
+        "navigationBarTitleText": "社交打卡"
+      }
     }
   ],
   "globalStyle": {
