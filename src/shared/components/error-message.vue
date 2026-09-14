@@ -4,7 +4,7 @@
       <uni-icons :type="iconType" size="60" :color="iconColor" />
       <text class="error-text">{{ text }}</text>
       <button v-if="retry" class="retry-button" @tap="$emit('retry')">
-        <uni-icons type="refresh" size="16" color="#ffffff" />
+        <uni-icons type="refreshempty" size="16" color="#ffffff" />
         <text class="retry-text">重试</text>
       </button>
     </view>
@@ -36,11 +36,12 @@ export default {
   emits: ['retry'],
   computed: {
     iconType() {
+      // 只使用 uni-icons 支持的有效图标类型
       const icons = {
         default: 'info',
-        network: 'wifi-off',
+        network: 'close',
         data: 'info',
-        permission: 'locked'
+        permission: 'lock'
       }
       return icons[this.type] || 'info'
     },

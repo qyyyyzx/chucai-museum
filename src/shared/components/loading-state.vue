@@ -1,7 +1,8 @@
 <template>
   <view v-if="visible" class="loading-state" :class="{ 'fullscreen': fullscreen }">
     <view class="loading-content">
-      <uni-icons type="loop" size="40" color="#2979ff" class="loading-icon" />
+      <!-- 用纯 CSS border 动画代替 uni-icons animation，兼容性更好 -->
+      <view class="loading-spinner" />
       <text class="loading-text">{{ text }}</text>
     </view>
   </view>
@@ -51,11 +52,16 @@ export default {
   align-items: center;
 }
 
-.loading-icon {
-  animation: rotate 1s linear infinite;
+.loading-spinner {
+  width: 64rpx;
+  height: 64rpx;
+  border: 6rpx solid #e0e0e0;
+  border-top-color: #2979ff;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
-@keyframes rotate {
+@keyframes spin {
   from {
     transform: rotate(0deg);
   }

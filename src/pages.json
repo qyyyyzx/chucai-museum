@@ -1,6 +1,12 @@
 {
   "pages": [
     {
+      "path": "pages/index/index",
+      "style": {
+        "navigationBarTitleText": "楚菜文化数字博物馆"
+      }
+    },
+    {
       "path": "pages/exhibit/list",
       "style": {
         "navigationBarTitleText": "楚菜展陈",
