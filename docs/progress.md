@@ -10,8 +10,8 @@
 |--------|------|------|
 | 董文静 | B1 用户登录 | 待开始 |
 | 周欣如 | B2 用户信息页面 | 待开始 |
-| 卫淇悦 | C1 展陈数据模型 + H1 餐厅数据模型 | 待开始 |
-| 武千惠 | A1 项目初始化 + A2 通用工具 + A3 通用组件 + C2 展陈列表页面 | A1 已完成，C2 进行中 |
+| 卫淇悦 | C1 展陈数据模型 + H1 餐厅数据模型 | C1 已完成（commit 80b1b59，代码/测试/文档齐全）；H1 待开始 |
+| 武千惠 | A1 项目初始化 + A2 通用工具 + A3 通用组件 + C2 展陈列表页面 | A1 已完成；A2 已完成（route-query.js、image-encode.js 及对应测试和文档齐全）；A3 已完成（exit-button、loading-state、error-message 三个组件齐全）；C2 进行中 |
 | 吴若凡 | C3 展陈详情页面 + C4 菜品故事卡 | 待开始 |
 | 余佳琦 | D1 H5 Mock 数据 | 待开始 |
 | 李语瞳 | D2 微信云函数 + G1 AR 调研 | 待开始 |
@@ -29,6 +29,27 @@
 | 打卡页面 | 已完成 | `src/pages/social/checkin.vue`（选照片、感想、地点、历史记录、删除） |
 | 分享功能 | 已完成 | 分享文案 `buildShareText()` + 记录卡片分享按钮（复制到剪贴板）+ 微信端 `onShareAppMessage` 原生转发 |
 | 单元测试 | 已完成 | 25 个用例（checkin-record + checkin-service） |
+
+## A2 通用工具（武千惠）
+
+| 步骤 | 状态 | 说明 |
+|------|------|------|
+| route-query.js | 已完成 | `src/shared/utils/route-query.js` 及对应测试和文档齐全 |
+| image-encode.js | 已完成 | `src/shared/utils/image-encode.js` 及对应测试和文档齐全 |
+
+## A3 通用组件（武千惠）
+
+| 步骤 | 状态 | 说明 |
+|------|------|------|
+| exit-button | 已完成 | `src/shared/components/exit-button.vue` |
+| loading-state | 已完成 | `src/shared/components/loading-state.vue` |
+| error-message | 已完成 | `src/shared/components/error-message.vue` |
+
+## C1 展陈数据模型（卫淇悦）
+
+| 步骤 | 状态 | 说明 |
+|------|------|------|
+| 菜品 / 名厨 / 历史时期数据模型 + 验证函数 + 测试 | 已完成 | commit 80b1b59，Mist7 提交，代码/测试/文档齐全 |
 
 ## C2 展陈列表页面（武千惠）
 
@@ -72,6 +93,5 @@
 
 ## 待确认事项
 
-- [ ] C1 数据模型定义（影响 Step 2）
-- [ ] D1 mock 数据实现（影响 Step 2）
-- [ ] C3 详情页负责人确认（影响 Step 6）
+- [ ] D1 mock 数据实现（影响 C2-Step2）
+- [ ] C3 详情页负责人确认（影响 C2-Step6）
