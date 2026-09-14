@@ -44,3 +44,5 @@ project.private.config.json
 .aider*
 .claude/
 *.backup
+.claude/
+*.backup
