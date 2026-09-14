@@ -92,6 +92,8 @@ chucai-museum/
 │   ├── pages/                            # uni-app 路由入口
 │   │   ├── exhibit/                      # 展陈页面
 │   │   │   └── list.vue                  # 菜品/名厨列表
+│   │   ├── social/                       # 社交打卡页面
+│   │   │   └── checkin.vue              # 拍照打卡（F1）
 │   │   └── llm.md
 │   ├── App.vue
 │   ├── main.js
@@ -108,7 +110,10 @@ chucai-museum/
 ├── docs/
 │   ├── task-division.md                  # 团队分工指南
 │   ├── progress.md                       # 开发进度追踪
-│   └── c2-exhibit-list-plan.md           # C2 任务拆分
+│   ├── pr-guide.md                       # PR 流程指南
+│   ├── modules/                          # src 代码对应说明文档（pre-commit 强制同步）
+│   ├── c2-exhibit-list-plan.md           # C2 任务拆分
+│   └── zyc-task-plan.md                 # F1 任务说明（张耀川）
 │
 ├── vite.config.js
 ├── vitest.config.js

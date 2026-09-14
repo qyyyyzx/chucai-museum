@@ -1,8 +1,8 @@
 # 楚菜文化数字博物馆 - 开发进度
 
-> 最后更新：2026-05-26
+> 最后更新：2026-09-14
 
-## 当前分支：dev/wqh
+## 当前分支：dev/zyc
 
 ## 团队分工总览
 
@@ -16,7 +16,19 @@
 | 余佳琦 | D1 H5 Mock 数据 | 待开始 |
 | 李语瞳 | D2 微信云函数 + G1 AR 调研 | 待开始 |
 | 黄晓 | E1 地理位置 + H2 楚菜地图页面 | 待开始 |
-| 张耀川 | F1 社交打卡 + H3 时辰介绍页 | 待开始 |
+| 张耀川 | F1 社交打卡（含分享功能） | 已完成（云函数端待 D2 接入） |
+
+## F1 社交打卡（张耀川）
+
+| 步骤 | 状态 | 说明 |
+|------|------|------|
+| 数据模型 + 验证函数 + 分享文案生成 | 已完成 | `src/modules/social/domain/checkin-record.js` |
+| 业务逻辑（blob 转 base64） | 已完成 | `src/modules/social/services/checkin-service.js` |
+| H5 mock 持久化 | 已完成 | `src/platform/mock/social.js`（localStorage，键 `chucai_social_checkins`） |
+| 平台统一入口 | 已完成 | `src/platform/api.js`（socialApi；云函数端待 D2 接入） |
+| 打卡页面 | 已完成 | `src/pages/social/checkin.vue`（选照片、感想、地点、历史记录、删除） |
+| 分享功能 | 已完成 | 分享文案 `buildShareText()` + 记录卡片分享按钮（复制到剪贴板）+ 微信端 `onShareAppMessage` 原生转发 |
+| 单元测试 | 已完成 | 25 个用例（checkin-record + checkin-service） |
 
 ## C2 展陈列表页面（武千惠）
 

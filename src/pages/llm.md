@@ -18,6 +18,7 @@
 | 路由路径 | 文件 | 所属模块 | 说明 |
 |----------|------|----------|------|
 | `/pages/exhibit/list` | `src/pages/exhibit/list.vue` | exhibit | 菜品/名厨列表页 |
+| `/pages/social/checkin` | `src/pages/social/checkin.vue` | social | 社交打卡页：选照片、写感想、保存、查看历史记录、分享（F1） |
 
 ### 路由注册规则
 
