@@ -23,6 +23,7 @@
   "devDependencies": {
     "husky": "^9.0.0",
     "jsdom": "^29.1.1",
+    "sass-embedded": "^1.104.1",
     "vitest": "^1.0.0"
   }
 }
