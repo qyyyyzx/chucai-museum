@@ -153,4 +153,67 @@ const CHEFS = [
     name: '余明社',
     photo: '/static/exhibit/chef-yu.jpg',
     bio:
-      '中国烹饪大师，潜江油焖大虾技艺的重要推广者。长期深耕湖北地方风味，尤其
+      '中国烹饪大师，潜江油焖大虾技艺的重要推广者。长期深耕湖北地方风味，擅长将地方食材与传统烹饪技艺结合，对楚菜的地方特色推广有重要贡献。',
+    signatureDishes: ['潜江油焖大虾', '清蒸武昌鱼', '排骨藕汤'],
+    type: 'chef',
+  },
+  {
+    id: 104,
+    name: '邹志平',
+    photo: '/static/exhibit/chef-zou.jpg',
+    bio:
+      '中国烹饪大师，楚菜技艺传承人。长期从事楚菜教学与推广工作，对沔阳三蒸、荆沙甲鱼等传统菜式的标准化制作有深入研究。',
+    signatureDishes: ['沔阳三蒸', '荆沙甲鱼', '黄陂三合'],
+    type: 'chef',
+  },
+  {
+    id: 105,
+    name: '王海东',
+    photo: '/static/exhibit/chef-wang.jpg',
+    bio:
+      '湖北烹饪名师，擅长楚菜传统技法与创新菜式。致力于将楚菜文化融入现代餐饮，多次参与楚菜推广活动。',
+    signatureDishes: ['东坡肉', '珍珠丸子', '红菜薹炒腊肉'],
+    type: 'chef',
+  },
+];
+
+/**
+ * 获取展品列表（支持按类型筛选 + 分页）
+ * @param {Object} params
+ * @param {'dish'|'chef'} [params.type] - 展品类型，不传返回全部
+ * @param {number} [params.page=1] - 页码，从 1 开始
+ * @param {number} [params.pageSize=10] - 每页条数
+ * @returns {Promise<{list: Array, total: number, hasMore: boolean}>}
+ */
+export async function getExhibitList({ type, page = 1, pageSize = 10 } = {}) {
+  let source = [];
+  if (type === 'dish') {
+    source = DISHES;
+  } else if (type === 'chef') {
+    source = CHEFS;
+  } else {
+    source = [...DISHES, ...CHEFS];
+  }
+
+  const total = source.length;
+  const start = (page - 1) * pageSize;
+  const end = start + pageSize;
+  const list = source.slice(start, end);
+
+  return {
+    list,
+    total,
+    hasMore: end < total,
+  };
+}
+
+/**
+ * 获取单个展品详情
+ * @param {number} id - 展品 ID
+ * @returns {Promise<Object|null>} 展品完整对象，找不到返回 null
+ */
+export async function getExhibitDetail(id) {
+  const all = [...DISHES, ...CHEFS];
+  const item = all.find((it) => it.id === id);
+  return item || null;
+}
