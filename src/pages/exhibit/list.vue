@@ -23,10 +23,15 @@
       <text class="refresh-text">正在刷新...</text>
     </view>
 
-    <view v-if="currentList.length > 0" class="list-wrap">
+    <view v-if="isLoading" class="refresh-tip">
+      <uni-icons type="refresh" size="20" color="#2979ff" />
+      <text class="refresh-text">加载中...</text>
+    </view>
+
+    <view v-if="!isLoading && list.length > 0" class="list-wrap">
       <uni-list>
         <uni-list-item
-          v-for="item in currentList"
+          v-for="item in list"
           :key="item.id"
           :title="item.name"
           :note="item.summary"
@@ -42,9 +47,18 @@
           </template>
         </uni-list-item>
       </uni-list>
+
+      <!-- 底部加载更多提示 -->
+      <view v-if="isLoadingMore" class="bottom-tip">
+        <uni-icons type="refresh" size="16" color="#999999" />
+        <text class="bottom-tip-text">加载中...</text>
+      </view>
+      <view v-else-if="!hasMore && list.length > 0" class="bottom-tip">
+        <text class="bottom-tip-text">没有更多了</text>
+      </view>
     </view>
 
-    <view v-else class="empty-state">
+    <view v-else-if="!isLoading" class="empty-state">
       <uni-icons type="info" size="60" color="#ccc" />
       <text class="empty-text">暂无数据</text>
     </view>
@@ -52,162 +66,136 @@
 </template>
 
 <script>
+import { exhibitApi } from '@/platform/api.js';
+
 export default {
   name: 'ExhibitList',
   data() {
     return {
       activeTab: 'dish',
       isRefreshing: false,
-      dishes: [
-        {
-          id: 1,
-          name: '武昌鱼',
-          summary: '楚菜经典名菜，清蒸武昌鱼，肉质鲜嫩，汤汁清香',
-          image: '/static/exhibit/wuchangyu.jpg',
-          type: 'dish'
-        },
-        {
-          id: 2,
-          name: '排骨藕汤',
-          summary: '湖北家家户户的传统汤品，藕粉糯、排骨酥烂',
-          image: '/static/exhibit/paigulotang.jpg',
-          type: 'dish'
-        },
-        {
-          id: 3,
-          name: '沔阳三蒸',
-          summary: '蒸菜、蒸鱼、蒸肉，湖北沔阳传统蒸菜技艺',
-          image: '/static/exhibit/mianyang.jpg',
-          type: 'dish'
-        },
-        {
-          id: 4,
-          name: '红菜薹炒腊肉',
-          summary: '武汉冬季时令名菜，红菜薹脆嫩、腊肉咸香',
-          image: '/static/exhibit/hongcaitai.jpg',
-          type: 'dish'
-        },
-        {
-          id: 5,
-          name: '潜江油焖大虾',
-          summary: '潜江特色小龙虾，麻辣鲜香，色泽红亮',
-          image: '/static/exhibit/qianjiangxia.jpg',
-          type: 'dish'
-        },
-        {
-          id: 6,
-          name: '黄陂三合',
-          summary: '肉丸、鱼丸、肉糕三合一，黄陂传统宴席菜',
-          image: '/static/exhibit/huangpi.jpg',
-          type: 'dish'
-        },
-        {
-          id: 7,
-          name: '东坡肉',
-          summary: '苏东坡谪居黄州时所创，肥而不腻、入口即化',
-          image: '/static/exhibit/dongporou.jpg',
-          type: 'dish'
-        },
-        {
-          id: 8,
-          name: '荆沙甲鱼',
-          summary: '荆州传统名菜，甲鱼软糯、汤汁浓郁',
-          image: '/static/exhibit/jingsha.jpg',
-          type: 'dish'
-        },
-        {
-          id: 9,
-          name: '钟祥蟠龙菜',
-          summary: '钟祥宫廷菜，色泽鲜艳、造型似龙',
-          image: '/static/exhibit/panlongcai.jpg',
-          type: 'dish'
-        },
-        {
-          id: 10,
-          name: '珍珠丸子',
-          summary: '糯米裹肉丸，晶莹剔透如珍珠，湖北蒸菜代表',
-          image: '/static/exhibit/zhenzhuwanzi.jpg',
-          type: 'dish'
-        }
-      ],
-      chefs: [
-        {
-          id: 101,
-          name: '卢永良',
-          summary: '中国烹饪大师，楚菜非遗传承人，擅长传统楚菜技法',
-          image: '/static/exhibit/chef-lu.jpg',
-          type: 'chef'
-        },
-        {
-          id: 102,
-          name: '孙昌弼',
-          summary: '鄂菜泰斗，深耕楚菜数十年，培养大批楚菜人才',
-          image: '/static/exhibit/chef-sun.jpg',
-          type: 'chef'
-        },
-        {
-          id: 103,
-          name: '余明社',
-          summary: '中国烹饪大师，潜江油焖大虾技艺推广者',
-          image: '/static/exhibit/chef-yu.jpg',
-          type: 'chef'
-        },
-        {
-          id: 104,
-          name: '邹志平',
-          summary: '楚菜名厨，专注湖北地方菜研究与创新',
-          image: '/static/exhibit/chef-zou.jpg',
-          type: 'chef'
-        },
-        {
-          id: 105,
-          name: '喻少林',
-          summary: '中式烹调高级技师，传承沔阳三蒸技艺',
-          image: '/static/exhibit/chef-yu2.jpg',
-          type: 'chef'
-        }
-      ]
-    }
+      isLoading: false,
+      isLoadingMore: false,
+      list: [],
+      total: 0,
+      hasMore: false,
+      page: 1,
+      pageSize: 10,
+    };
   },
-  computed: {
-    currentList() {
-      return this.activeTab === 'dish' ? this.dishes : this.chefs
-    }
+  watch: {
+    activeTab() {
+      this.page = 1;
+      this.list = [];
+      this.loadData();
+    },
+  },
+  onLoad() {
+    this.loadData();
   },
   onPullDownRefresh() {
-    this.refreshData()
+    this.refreshData();
+  },
+  onReachBottom() {
+    this.loadMore();
   },
   methods: {
+    /**
+     * 从 exhibitApi 加载展品列表（第一页，覆盖当前列表）
+     * mock 返回的菜品字段含 history，名厨含 bio，统一映射为 summary
+     */
+    async loadData() {
+      this.isLoading = true;
+      try {
+        const result = await exhibitApi.getExhibitList({
+          type: this.activeTab,
+          page: this.page,
+          pageSize: this.pageSize,
+        });
+        const mapped = (result.list || []).map((item) => ({
+          id: item.id,
+          name: item.name || '',
+          summary: item.summary || item.history || item.bio || '',
+          image: item.image || item.photo || '',
+          type: item.type || this.activeTab,
+        }));
+        this.list = mapped;
+        this.total = result.total || 0;
+        this.hasMore = result.hasMore || false;
+      } catch (error) {
+        uni.showToast({ title: error.message || '数据加载失败', icon: 'none' });
+        this.list = [];
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    /**
+     * 加载下一页数据，追加到列表末尾
+     * 防止重复请求：isLoadingMore 为 true 或 hasMore 为 false 时直接返回
+     */
+    async loadMore() {
+      if (this.isLoadingMore || !this.hasMore || this.isLoading) {
+        return;
+      }
+      this.isLoadingMore = true;
+      const nextPage = this.page + 1;
+      try {
+        const result = await exhibitApi.getExhibitList({
+          type: this.activeTab,
+          page: nextPage,
+          pageSize: this.pageSize,
+        });
+        const mapped = (result.list || []).map((item) => ({
+          id: item.id,
+          name: item.name || '',
+          summary: item.summary || item.history || item.bio || '',
+          image: item.image || item.photo || '',
+          type: item.type || this.activeTab,
+        }));
+        this.list = this.list.concat(mapped);
+        this.page = nextPage;
+        this.total = result.total || 0;
+        this.hasMore = result.hasMore || false;
+      } catch (error) {
+        uni.showToast({ title: error.message || '加载失败', icon: 'none' });
+      } finally {
+        this.isLoadingMore = false;
+      }
+    },
     goDetail(id) {
       uni.navigateTo({
-        url: `/pages/exhibit/detail?id=${id}`
-      })
+        url: `/pages/exhibit/detail?id=${id}`,
+      });
     },
     async refreshData() {
-      this.isRefreshing = true
-
+      this.isRefreshing = true;
+      this.page = 1;
       try {
-        // 模拟网络请求延迟
-        await new Promise(resolve => setTimeout(resolve, 1000))
-
-        // 这里后续会替换为真实的API调用
-        // 目前使用硬编码数据，刷新时重新加载
-        uni.showToast({
-          title: '刷新成功',
-          icon: 'success'
-        })
+        const result = await exhibitApi.getExhibitList({
+          type: this.activeTab,
+          page: 1,
+          pageSize: this.pageSize,
+        });
+        const mapped = (result.list || []).map((item) => ({
+          id: item.id,
+          name: item.name || '',
+          summary: item.summary || item.history || item.bio || '',
+          image: item.image || item.photo || '',
+          type: item.type || this.activeTab,
+        }));
+        this.list = mapped;
+        this.total = result.total || 0;
+        this.hasMore = result.hasMore || false;
+        uni.showToast({ title: '刷新成功', icon: 'success' });
       } catch (error) {
-        uni.showToast({
-          title: '刷新失败',
-          icon: 'none'
-        })
+        uni.showToast({ title: error.message || '刷新失败', icon: 'none' });
       } finally {
-        this.isRefreshing = false
-        uni.stopPullDownRefresh()
+        this.isRefreshing = false;
+        uni.stopPullDownRefresh();
       }
-    }
-  }
-}
+    },
+  },
+};
 </script>
 
 <style scoped>
@@ -272,6 +260,19 @@ export default {
   display: flex;
   align-items: center;
   margin-left: 16rpx;
+}
+
+.bottom-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 0;
+}
+
+.bottom-tip-text {
+  margin-left: 8rpx;
+  font-size: 26rpx;
+  color: #999999;
 }
 
 .empty-state {
