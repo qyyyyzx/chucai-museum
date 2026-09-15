@@ -11,6 +11,7 @@
  */
 
 import * as socialMock from './mock/social.js';
+import * as exhibitMock from './mock/exhibit.js';
 
 /**
  * 判断当前是否 H5 环境（有 localStorage）
@@ -65,5 +66,37 @@ export const socialApi = {
       return socialMock.deleteCheckinRecord(id);
     }
     cloudNotReady('deleteCheckinRecord');
+  },
+};
+
+/**
+ * 展陈域接口
+ */
+export const exhibitApi = {
+  /**
+   * 获取展品列表（支持按类型筛选 + 分页）
+   * @param {Object} params
+   * @param {'dish'|'chef'} [params.type] - 展品类型，不传返回全部
+   * @param {number} [params.page=1] - 页码，从 1 开始
+   * @param {number} [params.pageSize=10] - 每页条数
+   * @returns {Promise<{list: Array, total: number, hasMore: boolean}>}
+   */
+  getExhibitList(params) {
+    if (isH5()) {
+      return exhibitMock.getExhibitList(params);
+    }
+    cloudNotReady('getExhibitList');
+  },
+
+  /**
+   * 获取单个展品详情
+   * @param {number} id - 展品 ID
+   * @returns {Promise<Object|null>} 展品完整对象，找不到返回 null
+   */
+  getExhibitDetail(id) {
+    if (isH5()) {
+      return exhibitMock.getExhibitDetail(id);
+    }
+    cloudNotReady('getExhibitDetail');
   },
 };
