@@ -1,13 +1,12 @@
 /**
- * @file 平台适配层业务统一入口
+ * @file 平台接口统一入口
  * @module platform/api
  *
- * 业务代码通过本文件调用数据接口，不感知底层实现：
- * - H5 模式：分发到 mock/（localStorage 持久化）
- * - mp-weixin 模式：分发到 cloud/（微信云函数，待 D2 接入后启用）
+ * 根据运行环境（H5 / 微信小程序）将调用分发到对应实现：
+ * - H5：`src/platform/mock/` 下的 mock 实现
+ * - 微信小程序：云函数（D2 负责接入，当前抛出占位错误）
  *
- * 铁律 1.5（两端同步）：mock/ 与 cloud/ 的方法签名和返回 payload 必须同形。
- * D1 / D2 后续在各自任务中扩展本文件时，请保持既有结构不变、按下表登记。
+ * 业务层（modules/*/services/）只 import 本文件，不直接依赖 mock/ 或 cloud/。
  */
 
 import * as socialMock from './mock/social.js';
@@ -16,7 +15,7 @@ import * as lbsMock from './mock/lbs.js';
 import * as userMock from './mock/user.js';
 
 /**
- * 判断当前是否 H5 环境（有 localStorage）
+ * 判断当前是否运行在 H5 环境
  * @returns {boolean}
  */
 function isH5() {
@@ -24,16 +23,14 @@ function isH5() {
 }
 
 /**
- * 微信云函数端尚未接入时的占位实现
- * @param {string} name - 接口名
+ * 非 H5 环境下的占位抛错，提示云函数尚未接入
+ * @param {string} name - 接口名称
+ * @throws {Error}
  */
 function cloudNotReady(name) {
   throw new Error(`接口 ${name} 的微信云函数端尚未实现（D2 待接入），当前仅支持 H5 mock`);
 }
 
-/**
- * 社交打卡域接口
- */
 export const socialApi = {
   /**
    * 保存一条打卡记录（同 id 覆盖）
@@ -47,10 +44,6 @@ export const socialApi = {
     cloudNotReady('saveCheckinRecord');
   },
 
-  /**
-   * 获取全部打卡记录（按创建时间倒序）
-   * @returns {Array} 打卡记录数组
-   */
   getCheckinRecords() {
     if (isH5()) {
       return socialMock.getCheckinRecords();
@@ -58,11 +51,6 @@ export const socialApi = {
     cloudNotReady('getCheckinRecords');
   },
 
-  /**
-   * 删除一条打卡记录
-   * @param {number} id - 记录 ID
-   * @returns {boolean} 是否删除成功
-   */
   deleteCheckinRecord(id) {
     if (isH5()) {
       return socialMock.deleteCheckinRecord(id);
@@ -71,9 +59,6 @@ export const socialApi = {
   },
 };
 
-/**
- * 展陈域接口
- */
 export const exhibitApi = {
   /**
    * 获取展品列表（支持按类型筛选 + 分页）
@@ -90,11 +75,6 @@ export const exhibitApi = {
     cloudNotReady('getExhibitList');
   },
 
-  /**
-   * 获取单个展品详情
-   * @param {number} id - 展品 ID
-   * @returns {Promise<Object|null>} 展品完整对象，找不到返回 null
-   */
   getExhibitDetail(id) {
     if (isH5()) {
       return exhibitMock.getExhibitDetail(id);
@@ -103,9 +83,6 @@ export const exhibitApi = {
   },
 };
 
-/**
- * LBS 地理位置域接口
- */
 export const lbsApi = {
   /**
    * 按时辰时段查询餐厅列表
@@ -119,15 +96,6 @@ export const lbsApi = {
     cloudNotReady('getRestaurantsByTimeSlot');
   },
 
-  /**
-   * 获取当前用户位置
-   *
-   * H5 mock 下返回荆州市中心固定坐标，不调用浏览器 geolocation API。
-   * 微信端（D2 接入后）调用 uni.getLocation() 获取真实位置。
-   * 两端返回结构保持一致（铁律 1.5）。
-   *
-   * @returns {Promise<{ latitude: number, longitude: number }>} 当前位置坐标
-   */
   getCurrentLocation() {
     if (isH5()) {
       return lbsMock.getCurrentLocation();
@@ -136,9 +104,6 @@ export const lbsApi = {
   },
 };
 
-/**
- * 用户域接口
- */
 export const userApi = {
   /**
    * 用户登录
@@ -160,7 +125,7 @@ export const userApi = {
 
   /**
    * 用户登出
-   * 删除 localStorage 中的登录态（H5），微信端由 D2 实现对应逻辑。
+   * 清除当前登录态，登出后 getCurrentUser() 将返回 null。
    *
    * @returns {Promise<boolean>} 始终返回 true
    */
@@ -173,8 +138,7 @@ export const userApi = {
 
   /**
    * 获取当前登录用户
-   * 从 localStorage 读取（H5），未登录或数据损坏时返回 null。
-   * 微信端由 D2 实现对应逻辑。
+   * 未登录或登录态数据损坏时返回 null。
    *
    * @returns {Promise<Object|null>} 当前用户对象，未登录时返回 null
    */
@@ -183,5 +147,23 @@ export const userApi = {
       return userMock.getCurrentUser();
     }
     cloudNotReady('getCurrentUser');
+  },
+
+  /**
+   * 更新当前登录用户的昵称和头像
+   * 必须在已登录状态下调用；未登录时抛出错误。
+   * 只允许修改 nickname 和 avatar，id / openid / createdAt 保持不变。
+   *
+   * @param {Object} fields            - 待更新的字段
+   * @param {string} [fields.nickname] - 新昵称，传入有效字符串时 trim 后写入，否则保留原值
+   * @param {string} [fields.avatar]   - 新头像 URL 或 base64 dataURL，传入字符串时写入，否则保留原值
+   * @returns {Promise<Object>} 更新后的完整用户对象
+   * @throws {Error} 未登录时抛出错误
+   */
+  updateUser(fields) {
+    if (isH5()) {
+      return userMock.updateUser(fields);
+    }
+    cloudNotReady('updateUser');
   },
 };
