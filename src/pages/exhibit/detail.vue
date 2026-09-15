@@ -48,6 +48,12 @@
           />
         </view>
       </view>
+
+      <!-- 查看故事入口 -->
+      <view class="card story-btn" @tap="goStory">
+        <uni-icons type="book" size="18" color="#2979ff" />
+        <text class="story-btn-text">查看故事</text>
+      </view>
     </view>
 
     <!-- 名厨详情 -->
@@ -131,6 +137,14 @@ export default {
       this.isLoading = false;
     }
   },
+  methods: {
+    goStory() {
+      if (!this.detail) return;
+      uni.navigateTo({
+        url: `/pages/exhibit/story?id=${this.detail.id}`,
+      });
+    },
+  },
 };
 </script>
 
@@ -188,5 +202,19 @@ export default {
 
 .ingredient-tag {
   margin: 0;
+}
+
+/* 查看故事按钮 */
+.story-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 28rpx;
+}
+
+.story-btn-text {
+  font-size: 28rpx;
+  color: #2979ff;
+  margin-left: 8rpx;
 }
 </style>

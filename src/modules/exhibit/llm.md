@@ -19,7 +19,7 @@
 | 路由 | 文件 | 说明 |
 |------|------|------|
 | `/pages/exhibit/list` | `src/pages/exhibit/list.vue` | 菜品/名厨列表，tab 切换 |
-| `/pages/exhibit/story` | `src/pages/exhibit/story.vue` | 菜品故事卡（待开发） |
+| `/pages/exhibit/story` | `src/pages/exhibit/story.vue` | 菜品故事卡（已完成） |
 
 ### 接口（platform 层实现）
 
@@ -34,7 +34,7 @@
 
 | 文件 | 模型 | 必填字段 | 说明 |
 |------|------|----------|------|
-| `domain/dish.js` | Dish | `name` | 菜品：名称、图片、历史、做法、食材 |
+| `domain/dish.js` | Dish | `name` | 菜品：名称、图片、历史、做法、食材、典故、技艺、典故配图 |
 | `domain/chef.js` | Chef | `name` | 名厨：姓名、照片、简介、代表菜 |
 | `domain/historical-period.js` | HistoricalPeriod | `dynasty` | 历史时期：朝代、特点、代表菜 |
 | `domain/exhibit-item.js` | ExhibitItem | `id, name, type` | 统一展品列表项，Dish/Chef 通过 `toExhibitItem()` 转换 |
@@ -47,6 +47,9 @@ Dish {
   history: string
   method: string
   ingredients: string[]
+  story: string
+  technique: string
+  storyImages: string[]
 }
 
 Chef {
