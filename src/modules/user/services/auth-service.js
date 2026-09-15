@@ -53,3 +53,18 @@ export async function isLoggedIn() {
   const user = await getCurrentUser();
   return user !== null;
 }
+
+/**
+ * 更新当前登录用户的昵称和头像
+ * 必须在已登录状态下调用；未登录时底层会抛出错误。
+ * 只允许修改 nickname 和 avatar，id / openid / createdAt 保持不变。
+ *
+ * @param {Object} fields            - 待更新的字段
+ * @param {string} [fields.nickname] - 新昵称，传入有效字符串时 trim 后写入，否则保留原值
+ * @param {string} [fields.avatar]   - 新头像 URL 或 base64 dataURL，传入字符串时写入，否则保留原值
+ * @returns {Promise<Object>} 更新后的完整用户对象
+ * @throws {Error} 未登录时抛出错误
+ */
+export async function updateUser(fields) {
+  return userApi.updateUser(fields);
+}
