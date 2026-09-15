@@ -36,6 +36,12 @@
       "style": {
         "navigationBarTitleText": "社交打卡"
       }
+    },
+    {
+      "path": "pages/lbs/nearby",
+      "style": {
+        "navigationBarTitleText": "附近餐厅"
+      }
     }
   ],
   "globalStyle": {
