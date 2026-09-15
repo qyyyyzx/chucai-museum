@@ -41,6 +41,7 @@ User {
 | `logout` | `logout()` | `Promise<boolean>` | 登出，清除登录态，始终返回 true |
 | `getCurrentUser` | `getCurrentUser()` | `Promise<User\|null>` | 获取当前登录用户，未登录返回 null |
 | `isLoggedIn` | `isLoggedIn()` | `Promise<boolean>` | 判断是否已登录，内部复用 getCurrentUser |
+| `updateUser` | `updateUser({ nickname?, avatar? })` | `Promise<User>` | 更新已登录用户的昵称和头像，未登录时抛错 |
 
 ### 平台接口（platform 层，通过 userApi 调用）
 
@@ -49,6 +50,7 @@ User {
 | `userApi.login(params)` | `{ code?, nickname?, avatar? }` | `Promise<User>` | H5 mock：生成演示用户写入 localStorage；微信端：D2 待接入 |
 | `userApi.logout()` | 无 | `Promise<boolean>` | H5 mock：删除 localStorage 登录态；微信端：D2 待接入 |
 | `userApi.getCurrentUser()` | 无 | `Promise<User\|null>` | H5 mock：从 localStorage 读取；微信端：D2 待接入 |
+| `userApi.updateUser(fields)` | `{ nickname?, avatar? }` | `Promise<User>` | H5 mock：读取 localStorage 后合并字段写回；未登录时抛错 |
 
 ## Invariants
 
@@ -58,13 +60,14 @@ User {
 - **登录态存储键**：`chucai_user_current`，只存当前登录用户的完整 JSON；未登录时该键不存在；登出时删除该键
 - **openid 约束**：H5 mock 场景 openid 固定为占位值 `mock_openid_001`；微信端由 D2 用 code 换取真实 openid
 - **nickname 默认值**：H5 mock 不传 nickname 时默认为 `'楚菜爱好者'`；`createUser` 不传时默认为 `'游客'`（两处语义不同，均属正常）
+- **updateUser 登录态要求**：`updateUser` 必须在已登录状态下调用，未登录时抛错，不允许把未登录状态误当成首次登录
 
 ## Tests
 
 | 文件 | 测试对象 | 覆盖范围 |
 |------|----------|----------|
 | `tests/modules/user/user.test.js` | `domain/user.js` | `createUser` 默认值、字段赋值、自动 id、trim；`validateUser` 合法对象、null、非对象、缺 id、id 非数字、空 nickname、avatar/openid 非字符串、createdAt 格式错误、avatar/openid 允许空字符串 |
-| `tests/modules/user/auth-service.test.js` | `services/auth-service.js` | `login` 返回用户对象、参数透传；`logout` 返回 true、登出后 getCurrentUser 为 null；`getCurrentUser` 未登录返回 null、已登录返回对象；`isLoggedIn` 未登录返回 false、已登录返回 true、内部不绕过 getCurrentUser |
+| `tests/modules/user/auth-service.test.js` | `services/auth-service.js` | `login` 返回用户对象、参数透传；`logout` 返回 true、登出后 getCurrentUser 为 null；`getCurrentUser` 未登录返回 null、已登录返回对象；`isLoggedIn` 未登录返回 false、已登录返回 true、内部不绕过 getCurrentUser；`updateUser` 已登录时返回更新后用户、参数透传、未登录时抛错 |
 
 ## Change Protocol
 
