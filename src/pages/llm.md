@@ -19,6 +19,7 @@
 |----------|------|----------|------|
 | `/pages/exhibit/list` | `src/pages/exhibit/list.vue` | exhibit | 菜品/名厨列表页 |
 | `/pages/social/checkin` | `src/pages/social/checkin.vue` | social | 社交打卡页：选照片、写感想、保存、查看历史记录、分享（F1） |
+| `/pages/user/profile` | `src/pages/user/profile.vue` | user | 个人信息页：展示和编辑用户昵称、头像，支持首次登录和退出登录（B2） |
 
 ### 路由注册规则
 
@@ -40,7 +41,7 @@
 
 ## Tests
 
-页面层不写单元测��（无 UI 测试框架）。验证方式：
+页面层不写单元测试（无 UI 测试框架）。验证方式：
 - `npm run dev:h5` 浏览器手动验证 golden path + edge case
 - `npm run build:h5` 全量打包成功
 
