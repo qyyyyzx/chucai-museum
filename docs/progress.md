@@ -13,7 +13,7 @@
 | 卫淇悦 | C1 展陈数据模型 + H1 餐厅数据模型 | C1 已完成（commit 80b1b59，代码/测试/文档齐全）；H1 待开始 |
 | 武千惠 | A1 项目初始化 + A2 通用工具 + A3 通用组件 + C2 展陈列表页面 | A1 已完成；A2 已完成（route-query.js、image-encode.js 及对应测试和文档齐全）；A3 已完成（exit-button、loading-state、error-message 三个组件齐全）；C2 进行中 |
 | 吴若凡 | C3 展陈详情页面 + C4 菜品故事卡 | 待开始 |
-| 余佳琦 | D1 H5 Mock 数据 | 待开始 |
+| 余佳琦 | D1 H5 Mock 数据 | 已完成（src/platform/mock/exhibit.js 及 exhibitApi 已就绪） |
 | 李语瞳 | D2 微信云函数 + G1 AR 调研 | 待开始 |
 | 黄晓 | E1 地理位置 + H2 楚菜地图页面 | 待开始 |
 | 张耀川 | F1 社交打卡（含分享功能） | 已完成（云函数端待 D2 接入） |
@@ -56,11 +56,11 @@
 | 步骤 | 状态 | 说明 |
 |------|------|------|
 | Step 1：创建页面 + 注册路由 | 已完成 | `src/pages/exhibit/list.vue` + `src/pages.json` |
-| Step 2：数据结构 + mock 数据 | 待开始 | 依赖 C1、D1 |
+| Step 2：数据结构 + mock 数据 | 已完成 | 已接入 `exhibitApi.getExhibitList()`，D1 mock 数据已就绪 |
 | Step 3：列表展示 UI | 已完成 | tab 切换 + uni-list + 10 道菜品 + 5 位名厨硬编码数据 |
 | Step 4：下拉刷新 | 已完成 | `onPullDownRefresh` + `refreshData` + 加载状态提示 + 7个测试用例 |
-| Step 5：上拉加载更多 | 待开始 | 依赖 Step 2 分页接口 |
-| Step 6：点击跳转详情 | 待开始 | 需 C3 详情页或占位页 |
+| Step 5：上拉加载更多 | 已完成 | `onReachBottom` + `loadMore` + 分页追加 + 底部 loading/"没有更多了"提示；D1 mock 分页数据已就绪 |
+| Step 6：点击跳转详情 | 占位完成 | `goDetail()` 已实现跳转逻辑；`src/pages/exhibit/detail.vue` 占位页已创建（可接收 id 参数）；待 C3（吴若凡）开发真实详情页 |
 
 ## 基础设施
 
@@ -93,5 +93,5 @@
 
 ## 待确认事项
 
-- [ ] D1 mock 数据实现（影响 C2-Step2）
-- [ ] C3 详情页负责人确认（影响 C2-Step6）
+- [x] D1 mock 数据实现（`src/platform/mock/exhibit.js` 及 `exhibitApi` 已就绪，C2-Step2、C2-Step5 端到端验证完成）
+- [ ] C3 详情页负责人确认开发时间（C2-Step6 占位页已就绪，待 C3 替换）

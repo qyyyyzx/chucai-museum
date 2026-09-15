@@ -8,6 +8,12 @@
       }
     },
     {
+      "path": "pages/exhibit/detail",
+      "style": {
+        "navigationBarTitleText": "展品详情"
+      }
+    },
+    {
       "path": "pages/shared/components-demo",
       "style": {
         "navigationBarTitleText": "通用组件示例"
