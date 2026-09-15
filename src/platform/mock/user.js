@@ -101,3 +101,31 @@ export async function logout() {
 export async function getCurrentUser() {
   return loadFromStorage();
 }
+
+/**
+ * 更新当前登录用户的昵称和头像
+ * 必须在已登录状态下调用；未登录时抛出错误，不将未登录误当成更新。
+ * 只允许修改 nickname 和 avatar，id / openid / createdAt 保持不变。
+ *
+ * @param {Object} fields            - 待更新的字段
+ * @param {string} [fields.nickname] - 新昵称，传入有效字符串时 trim 后写入，否则保留原值
+ * @param {string} [fields.avatar]   - 新头像 URL 或 base64 dataURL，传入字符串时写入，否则保留原值
+ * @returns {Promise<Object>} 更新后的完整用户对象
+ * @throws {Error} 未登录时抛出错误
+ */
+export async function updateUser({ nickname, avatar } = {}) {
+  const current = loadFromStorage();
+  if (!current) {
+    throw new Error('当前未登录，无法更新用户信息');
+  }
+
+  const updated = {
+    ...current,
+    nickname:
+      typeof nickname === 'string' && nickname.trim() ? nickname.trim() : current.nickname,
+    avatar: typeof avatar === 'string' ? avatar : current.avatar,
+  };
+
+  saveToStorage(updated);
+  return updated;
+}
