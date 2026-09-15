@@ -6,7 +6,7 @@
  * - H5：`src/platform/mock/` 下的 mock 实现
  * - 微信小程序：云函数（D2 负责接入，当前抛出占位错误）
  *
- * 业务层（modules/*/services/）只 import 本文件，不直接依赖 mock/ 或 cloud/。
+ * 业务层（modules 下各 services）只 import 本文件，不直接依赖 mock 或 cloud。
  */
 
 import * as socialMock from './mock/social.js';
