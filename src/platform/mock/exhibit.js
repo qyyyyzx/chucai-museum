@@ -145,4 +145,12 @@ const CHEFS = [
     photo: '/static/exhibit/chef-sun.jpg',
     bio:
       '鄂菜泰斗，国家级非物质文化遗产楚菜烹饪技艺代表性传承人。深耕楚菜数十年，系统整理并出版《楚菜大典》，培养了大批优秀楚菜厨师。对楚菜理论体系的建立和推广做出了奠基性贡献。',
-    signatureDishes:
+    signatureDishes: ['红烧武昌鱼', '沔阳三蒸', '荆沙甲鱼', '东坡肉'],
+    type: 'chef',
+  },
+  {
+    id: 103,
+    name: '余明社',
+    photo: '/static/exhibit/chef-yu.jpg',
+    bio:
+      '中国烹饪大师，潜江油焖大虾技艺的重要推广者。长期深耕湖北地方风味，尤其
