@@ -13,6 +13,7 @@
 import * as socialMock from './mock/social.js';
 import * as exhibitMock from './mock/exhibit.js';
 import * as lbsMock from './mock/lbs.js';
+import * as userMock from './mock/user.js';
 
 /**
  * 判断当前是否 H5 环境（有 localStorage）
@@ -116,5 +117,55 @@ export const lbsApi = {
       return lbsMock.getRestaurantsByTimeSlot(timeSlot);
     }
     cloudNotReady('getRestaurantsByTimeSlot');
+  },
+};
+
+/**
+ * 用户域接口
+ */
+export const userApi = {
+  /**
+   * 用户登录
+   * H5 mock 场景下忽略 code，用 nickname/avatar 生成演示用户并写入 localStorage。
+   * 微信端（D2 接入后）使用 code 换取 openid，忽略 nickname/avatar。
+   *
+   * @param {Object} [params]              - 登录参数
+   * @param {string} [params.code]         - 微信登录 code，H5 mock 忽略此字段
+   * @param {string} [params.nickname]     - 用户昵称，H5 不传时默认 '楚菜爱好者'
+   * @param {string} [params.avatar]       - 头像 URL 或 base64 dataURL，H5 不传时默认为空字符串
+   * @returns {Promise<Object>} 登录成功后的用户对象
+   */
+  login(params) {
+    if (isH5()) {
+      return userMock.login(params);
+    }
+    cloudNotReady('login');
+  },
+
+  /**
+   * 用户登出
+   * 删除 localStorage 中的登录态（H5），微信端由 D2 实现对应逻辑。
+   *
+   * @returns {Promise<boolean>} 始终返回 true
+   */
+  logout() {
+    if (isH5()) {
+      return userMock.logout();
+    }
+    cloudNotReady('logout');
+  },
+
+  /**
+   * 获取当前登录用户
+   * 从 localStorage 读取（H5），未登录或数据损坏时返回 null。
+   * 微信端由 D2 实现对应逻辑。
+   *
+   * @returns {Promise<Object|null>} 当前用户对象，未登录时返回 null
+   */
+  getCurrentUser() {
+    if (isH5()) {
+      return userMock.getCurrentUser();
+    }
+    cloudNotReady('getCurrentUser');
   },
 };
