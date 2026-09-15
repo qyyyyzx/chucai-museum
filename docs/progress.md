@@ -56,11 +56,11 @@
 | 步骤 | 状态 | 说明 |
 |------|------|------|
 | Step 1：创建页面 + 注册路由 | 已完成 | `src/pages/exhibit/list.vue` + `src/pages.json` |
-| Step 2：数据结构 + mock 数据 | 待开始 | 依赖 C1、D1 |
+| Step 2：数据结构 + mock 数据 | 待验证 | 调用逻辑已实现（`exhibitApi.getExhibitList`）；依赖 D1（余佳琦）完成正式 mock 数据后端到端验证 |
 | Step 3：列表展示 UI | 已完成 | tab 切换 + uni-list + 10 道菜品 + 5 位名厨硬编码数据 |
 | Step 4：下拉刷新 | 已完成 | `onPullDownRefresh` + `refreshData` + 加载状态提示 + 7个测试用例 |
-| Step 5：上拉加载更多 | 待开始 | 依赖 Step 2 分页接口 |
-| Step 6：点击跳转详情 | 待开始 | 需 C3 详情页或占位页 |
+| Step 5：上拉加载更多 | 已完成 | `onReachBottom` + `loadMore` + 分页追加 + 底部 loading/"没有更多了"提示；待 D1 mock 就绪后端到端验证 |
+| Step 6：点击跳转详情 | 占位完成 | `goDetail()` 已实现跳转逻辑；`src/pages/exhibit/detail.vue` 占位页已创建（可接收 id 参数）；待 C3（吴若凡）开发真实详情页 |
 
 ## 基础设施
 
@@ -93,5 +93,5 @@
 
 ## 待确认事项
 
-- [ ] D1 mock 数据实现（影响 C2-Step2）
-- [ ] C3 详情页负责人确认（影响 C2-Step6）
+- [ ] D1 mock 数据实现（影响 C2-Step2、C2-Step5 端到端验证）
+- [ ] C3 详情页负责人确认开发时间（C2-Step6 占位页已就绪，待 C3 替换）
