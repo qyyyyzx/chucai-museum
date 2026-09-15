@@ -50,8 +50,43 @@
       </view>
     </view>
 
-    <!-- 非菜品类型：Step 3 处理，暂不显示 -->
-    <view v-else-if="detail && detail.type !== 'dish'" />
+    <!-- 名厨详情 -->
+    <view v-else-if="detail && detail.type === 'chef'" class="content">
+      <!-- 顶部照片 -->
+      <image
+        v-if="detail.photo && !imageError"
+        :src="detail.photo"
+        class="hero-image"
+        mode="widthFix"
+        @error="imageError = true"
+      />
+
+      <!-- 基本信息卡片 -->
+      <view class="card">
+        <text class="title">{{ detail.name }}</text>
+      </view>
+
+      <!-- 简介 -->
+      <view v-if="detail.bio" class="card">
+        <text class="section-label">名厨简介</text>
+        <text class="section-body">{{ detail.bio }}</text>
+      </view>
+
+      <!-- 代表菜品 -->
+      <view v-if="detail.signatureDishes && detail.signatureDishes.length > 0" class="card">
+        <text class="section-label">代表菜品</text>
+        <view class="ingredients-wrap">
+          <uni-tag
+            v-for="(dish, index) in detail.signatureDishes"
+            :key="index"
+            :text="dish"
+            type="primary"
+            size="normal"
+            class="ingredient-tag"
+          />
+        </view>
+      </view>
+    </view>
   </view>
 </template>
 
