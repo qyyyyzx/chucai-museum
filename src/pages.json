@@ -1,4 +1,10 @@
 {
+  "easycom": {
+    "autoscan": true,
+    "custom": {
+      "^uni-(.*)": "@dcloudio/uni-ui/lib/uni-$1/uni-$1.vue"
+    }
+  },
   "pages": [
     {
       "path": "pages/exhibit/list",
@@ -29,6 +35,12 @@
       "path": "pages/social/checkin",
       "style": {
         "navigationBarTitleText": "社交打卡"
+      }
+    },
+    {
+      "path": "pages/lbs/nearby",
+      "style": {
+        "navigationBarTitleText": "附近餐厅"
       }
     }
   ],
