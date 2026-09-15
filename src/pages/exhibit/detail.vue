@@ -6,10 +6,52 @@
     <!-- 加载失败 -->
     <error-message v-else-if="errorMsg" :message="errorMsg" />
 
-    <!-- 加载成功，内容区占位（Step 2/3 填充） -->
-    <view v-else-if="detail">
-      <text>{{ detail.name }}</text>
+    <!-- 菜品详情 -->
+    <view v-else-if="detail && detail.type === 'dish'" class="content">
+      <!-- 顶部大图 -->
+      <image
+        v-if="detail.image && !imageError"
+        :src="detail.image"
+        class="hero-image"
+        mode="widthFix"
+        @error="imageError = true"
+      />
+
+      <!-- 基本信息卡片 -->
+      <view class="card">
+        <text class="title">{{ detail.name }}</text>
+      </view>
+
+      <!-- 历史渊源 -->
+      <view v-if="detail.history" class="card">
+        <text class="section-label">历史渊源</text>
+        <text class="section-body">{{ detail.history }}</text>
+      </view>
+
+      <!-- 烹饪做法 -->
+      <view v-if="detail.method" class="card">
+        <text class="section-label">烹饪做法</text>
+        <text class="section-body">{{ detail.method }}</text>
+      </view>
+
+      <!-- 食材列表 -->
+      <view v-if="detail.ingredients && detail.ingredients.length > 0" class="card">
+        <text class="section-label">主要食材</text>
+        <view class="ingredients-wrap">
+          <uni-tag
+            v-for="(item, index) in detail.ingredients"
+            :key="index"
+            :text="item"
+            type="primary"
+            size="normal"
+            class="ingredient-tag"
+          />
+        </view>
+      </view>
     </view>
+
+    <!-- 非菜品类型：Step 3 处理，暂不显示 -->
+    <view v-else-if="detail && detail.type !== 'dish'" />
   </view>
 </template>
 
@@ -30,6 +72,7 @@ export default {
       isLoading: false,
       errorMsg: '',
       detail: null,
+      imageError: false,
     };
   },
   async onLoad(options) {
@@ -60,5 +103,55 @@ export default {
 .page {
   background-color: #f5f5f5;
   min-height: 100vh;
+}
+
+.content {
+  padding-bottom: 40rpx;
+}
+
+.hero-image {
+  width: 100%;
+  display: block;
+}
+
+.card {
+  background-color: #ffffff;
+  border-radius: 16rpx;
+  margin: 20rpx 24rpx 0;
+  padding: 32rpx;
+}
+
+.title {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #1a1a1a;
+  line-height: 1.4;
+}
+
+.section-label {
+  font-size: 28rpx;
+  font-weight: bold;
+  color: #333333;
+  display: block;
+  margin-bottom: 16rpx;
+  padding-left: 12rpx;
+  border-left: 6rpx solid #2979ff;
+}
+
+.section-body {
+  font-size: 28rpx;
+  color: #555555;
+  line-height: 1.8;
+  display: block;
+}
+
+.ingredients-wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.ingredient-tag {
+  margin: 0;
 }
 </style>
