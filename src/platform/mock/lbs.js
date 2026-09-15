@@ -144,3 +144,19 @@ export function getRestaurantsByTimeSlot(timeSlot) {
   const list = MOCK_RESTAURANTS.filter((r) => r.timeSlot === timeSlot);
   return { list, total: list.length };
 }
+
+/**
+ * 获取当前用户位置（H5 mock 实现）
+ *
+ * H5 环境下不调用浏览器 geolocation API，直接返回荆州市中心固定坐标。
+ * 原因：浏览器 geolocation 在 localhost 下需要授权且非 HTTPS 环境可能失败，
+ * 而验收标准只要求"H5 模式下能模拟获取位置"，固定坐标完全满足。
+ *
+ * 返回结构与微信端 uni.getLocation() 对齐（铁律 1.5），
+ * 未来微信端实现时只需保持 { latitude, longitude } 结构不变。
+ *
+ * @returns {Promise<{ latitude: number, longitude: number }>} 当前位置坐标
+ */
+export function getCurrentLocation() {
+  return Promise.resolve({ latitude: 30.3322, longitude: 112.2384 });
+}

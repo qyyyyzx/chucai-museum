@@ -118,6 +118,22 @@ export const lbsApi = {
     }
     cloudNotReady('getRestaurantsByTimeSlot');
   },
+
+  /**
+   * 获取当前用户位置
+   *
+   * H5 mock 下返回荆州市中心固定坐标，不调用浏览器 geolocation API。
+   * 微信端（D2 接入后）调用 uni.getLocation() 获取真实位置。
+   * 两端返回结构保持一致（铁律 1.5）。
+   *
+   * @returns {Promise<{ latitude: number, longitude: number }>} 当前位置坐标
+   */
+  getCurrentLocation() {
+    if (isH5()) {
+      return lbsMock.getCurrentLocation();
+    }
+    cloudNotReady('getCurrentLocation');
+  },
 };
 
 /**
