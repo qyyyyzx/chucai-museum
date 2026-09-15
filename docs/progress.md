@@ -11,7 +11,7 @@
 | 董文静 | B1 用户登录 | 待开始 |
 | 周欣如 | B2 用户信息页面 | 待开始 |
 | 卫淇悦 | C1 展陈数据模型 + H1 餐厅数据模型 | C1 已完成（commit 80b1b59，代码/测试/文档齐全）；H1 已完成（commit 8fcf9ad，代码/测试/文档齐全） |
-| 武千惠 | A1 项目初始化 + A2 通用工具 + A3 通用组件 + C2 展陈列表页面 | A1 已完成；A2 已完成（route-query.js、image-encode.js 及对应测试和文档齐全）；A3 已完成（exit-button、loading-state、error-message 三个组件齐全）；C2 进行中 |
+| 武千惠 | A1 项目初始化 + A2 通用工具 + A3 通用组件 + C2 展陈列表页面 | A1 已完成；A2 已完成（route-query.js、image-encode.js 及对应测试和文档齐全）；A3 已完成（exit-button、loading-state、error-message 三个组件齐全）；C2 已完成 |
 | 吴若凡 | C3 展陈详情页面 + C4 菜品故事卡 | C3、C4 已完成 |
 | 余佳琦 | D1 H5 Mock 数据 | 已完成（src/platform/mock/exhibit.js 及 exhibitApi 已就绪） |
 | 李语瞳 | D2 微信云函数 + G1 AR 调研 | 待开始 |
