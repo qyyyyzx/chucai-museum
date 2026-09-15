@@ -47,6 +47,15 @@
           </template>
         </uni-list-item>
       </uni-list>
+
+      <!-- 底部加载更多提示 -->
+      <view v-if="isLoadingMore" class="bottom-tip">
+        <uni-icons type="refresh" size="16" color="#999999" />
+        <text class="bottom-tip-text">加载中...</text>
+      </view>
+      <view v-else-if="!hasMore && list.length > 0" class="bottom-tip">
+        <text class="bottom-tip-text">没有更多了</text>
+      </view>
     </view>
 
     <view v-else-if="!isLoading" class="empty-state">
@@ -66,6 +75,7 @@ export default {
       activeTab: 'dish',
       isRefreshing: false,
       isLoading: false,
+      isLoadingMore: false,
       list: [],
       total: 0,
       hasMore: false,
@@ -86,9 +96,12 @@ export default {
   onPullDownRefresh() {
     this.refreshData();
   },
+  onReachBottom() {
+    this.loadMore();
+  },
   methods: {
     /**
-     * 从 exhibitApi 加载展品列表
+     * 从 exhibitApi 加载展品列表（第一页，覆盖当前列表）
      * mock 返回的菜品字段含 history，名厨含 bio，统一映射为 summary
      */
     async loadData() {
@@ -114,6 +127,39 @@ export default {
         this.list = [];
       } finally {
         this.isLoading = false;
+      }
+    },
+    /**
+     * 加载下一页数据，追加到列表末尾
+     * 防止重复请求：isLoadingMore 为 true 或 hasMore 为 false 时直接返回
+     */
+    async loadMore() {
+      if (this.isLoadingMore || !this.hasMore || this.isLoading) {
+        return;
+      }
+      this.isLoadingMore = true;
+      const nextPage = this.page + 1;
+      try {
+        const result = await exhibitApi.getExhibitList({
+          type: this.activeTab,
+          page: nextPage,
+          pageSize: this.pageSize,
+        });
+        const mapped = (result.list || []).map((item) => ({
+          id: item.id,
+          name: item.name || '',
+          summary: item.summary || item.history || item.bio || '',
+          image: item.image || item.photo || '',
+          type: item.type || this.activeTab,
+        }));
+        this.list = this.list.concat(mapped);
+        this.page = nextPage;
+        this.total = result.total || 0;
+        this.hasMore = result.hasMore || false;
+      } catch (error) {
+        uni.showToast({ title: error.message || '加载失败', icon: 'none' });
+      } finally {
+        this.isLoadingMore = false;
       }
     },
     goDetail(id) {
@@ -214,6 +260,19 @@ export default {
   display: flex;
   align-items: center;
   margin-left: 16rpx;
+}
+
+.bottom-tip {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24rpx 0;
+}
+
+.bottom-tip-text {
+  margin-left: 8rpx;
+  font-size: 26rpx;
+  color: #999999;
 }
 
 .empty-state {
