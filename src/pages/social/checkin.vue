@@ -96,9 +96,15 @@
 <script>
 import { createCheckin, getCheckinRecords, deleteCheckinRecord } from '@/modules/social/services/checkin-service.js';
 import { buildShareText } from '@/modules/social/domain/checkin-record.js';
+import LoadingState from '@/shared/components/loading-state.vue';
+import ErrorMessage from '@/shared/components/error-message.vue';
 
 export default {
   name: 'SocialCheckin',
+  components: {
+    LoadingState,
+    ErrorMessage,
+  },
   data() {
     return {
       selectedImages: [],
