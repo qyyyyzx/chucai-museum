@@ -44,6 +44,12 @@
       }
     },
     {
+      "path": "pages/lbs/chumap",
+      "style": {
+        "navigationBarTitleText": "筷乐寻楚"
+      }
+    },
+    {
       "path": "pages/user/profile",
       "style": {
         "navigationBarTitleText": "个人信息"
@@ -63,6 +69,10 @@
       {
         "pagePath": "pages/lbs/nearby",
         "text": "附近"
+      },
+      {
+        "pagePath": "pages/lbs/chumap",
+        "text": "楚菜"
       },
       {
         "pagePath": "pages/social/checkin",
