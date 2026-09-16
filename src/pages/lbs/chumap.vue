@@ -4,6 +4,7 @@
     <time-slot-bar
       :modelValue="selectedSlot"
       @change="onSlotChange"
+      @detail="openSlotDetail"
     />
 
     <!-- 主体内容区 -->
@@ -118,14 +119,20 @@
         </view>
       </view>
     </uni-popup>
+    <!-- 时辰文化介绍弹窗 -->
+    <time-slot-detail
+      ref="slotDetail"
+      :slotInfo="currentSlotInfo"
+    />
   </view>
 </template>
 
 <script>
 import { lbsApi } from '@/platform/api.js';
-import { getCurrentTimeSlot } from '@/modules/lbs/domain/time-slots.js';
+import { getCurrentTimeSlot, getTimeSlotInfo } from '@/modules/lbs/domain/time-slots.js';
 import { sortRestaurantsByDistance } from '@/modules/lbs/domain/distance.js';
 import TimeSlotBar from '@/pages/lbs/components/TimeSlotBar.vue';
+import TimeSlotDetail from '@/pages/lbs/components/TimeSlotDetail.vue';
 import LoadingState from '@/shared/components/loading-state.vue';
 import ErrorMessage from '@/shared/components/error-message.vue';
 
@@ -144,6 +151,7 @@ export default {
     TimeSlotBar,
     LoadingState,
     ErrorMessage,
+    TimeSlotDetail,
   },
 
   data() {
@@ -168,6 +176,8 @@ export default {
 
       /** 弹窗内容是否可渲染（与动画解耦，避免关闭时属性访问报错） */
       popupVisible: false,
+      /** 当前"时辰详情"弹窗显示的时辰对象 */
+      currentSlotInfo: null,
     };
   },
 
@@ -260,6 +270,20 @@ export default {
         name,
         address,
         scale: 18,
+      });
+    },
+    /**
+     * 打开时辰文化介绍弹窗
+     * @param {string} slot - 时辰 slot 标识（如 'wu'）
+     */
+    openSlotDetail(slot) {
+      const info = getTimeSlotInfo(slot);
+      if (!info) {
+        return;
+      }
+      this.currentSlotInfo = info;
+      this.$nextTick(() => {
+        this.$refs.slotDetail.open();
       });
     },
   },
