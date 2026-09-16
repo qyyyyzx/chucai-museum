@@ -21,6 +21,11 @@ const DISHES = [
     method:
       '选用鲜活武昌鱼，去鳞去内脏洗净，两面剞花刀，抹盐腌制片刻。鱼身铺姜片、葱段，大火蒸8-10分钟，滗去汤汁，淋上热油和蒸鱼豉油即可。',
     ingredients: ['武昌鱼', '姜', '葱', '蒸鱼豉油', '料酒', '盐'],
+    story:
+      '梁子湖烟波浩渺，湖心深处生长着一种体型扁圆、鳞片银亮的鱼，当地人称之为团头鲂，外人唤作武昌鱼。三国时期，吴主孙皓好大喜功，欲将国都从建业迁往武昌。左丞相陆凯闻讯上疏劝阻，引民间谚语"宁饮建业水，不食武昌鱼"，以百姓之苦力谏君王，此语由此传入史册，武昌鱼之名也随之流传千年。\n\n至宋元之际，梁子湖渔民已将清蒸之法世代相传。蒸鱼不加繁复调料，只取姜葱压腥、豉油提鲜，以大火催熟，最大程度保留鱼肉本味——这正是楚地饮食崇尚本真的体现。\n\n1956年，毛泽东畅游长江后写下"才饮长沙水，又食武昌鱼"的词句，令这道湖北家常菜一夜间声名远播。此后武昌鱼登上国宴餐桌，成为楚菜走向全国的一张名片。时至今日，每逢宾客临门，湖北人仍以一道清蒸武昌鱼表达最高礼遇，鱼之鲜美与千年典故，就此融为一体。',
+    technique:
+      '清蒸武昌鱼讲究三点：其一，刀工，两侧各斜剞三至四刀，深至骨但不断，使鱼身受热均匀、入味更深；其二，火候，水沸后方可上屉，全程大火蒸八至十分钟，时间过长则肉质变柴、鲜味流失；其三，收汁，蒸好后立即滗去盘中积水，随即将烧至冒烟的热油泼于鱼身，激出葱姜香气，最后沿鱼身淋入蒸鱼豉油而非直接浇顶，以免咸淡不均。全程不加味精，靠食材本鲜取胜。',
+    storyImages: ['/static/exhibit/wuchangyu.jpg'],
     type: 'dish',
   },
   {
@@ -119,101 +124,4 @@ const DISHES = [
       '珍珠丸子是湖北传统蒸菜的代表，以糯米裹肉丸蒸制而成，糯米蒸熟后晶莹剔透、颗颗饱满，状如珍珠，故名。常见于湖北宴席头菜，也是沔阳三蒸系列的重要组成部分。',
     method:
       '猪肉剁成泥，加马蹄碎、葱姜末、鸡蛋、盐、淀粉搅打上劲。糯米提前浸泡四小时沥干。将肉泥搓成圆球，均匀裹上糯米，摆入蒸屉大火蒸三十分钟至糯米透明即可。',
-    ingredients: ['猪肉', '糯米', '马蹄', '鸡蛋', '淀粉', '葱', '姜', '盐'],
-    type: 'dish',
-  },
-];
-
-/**
- * 名厨完整数据列表（5 条）
- * 字段对应 src/modules/exhibit/domain/chef.js 的 Chef 类型
- * @type {import('@/modules/exhibit/domain/chef.js').Chef[]}
- */
-const CHEFS = [
-  {
-    id: 101,
-    name: '卢永良',
-    photo: '/static/exhibit/chef-lu.jpg',
-    bio:
-      '中国烹饪大师，楚菜非遗传承人。师从鄂菜泰斗黄昌祥，从事烹饪工作四十余年。擅长将传统楚菜与现代烹饪技艺结合，对武昌鱼、沔阳三蒸等经典楚菜的传承与推广做出重要贡献。曾多次代表中国参加国际烹饪赛事并获奖。',
-    signatureDishes: ['清蒸武昌鱼', '排骨藕汤', '沔阳三蒸', '红菜薹炒腊肉'],
-    type: 'chef',
-  },
-  {
-    id: 102,
-    name: '孙昌弼',
-    photo: '/static/exhibit/chef-sun.jpg',
-    bio:
-      '鄂菜泰斗，国家级非物质文化遗产楚菜烹饪技艺代表性传承人。深耕楚菜数十年，系统整理并出版《楚菜大典》，培养了大批优秀楚菜厨师。对楚菜理论体系的建立和推广做出了奠基性贡献。',
-    signatureDishes: ['红烧武昌鱼', '沔阳三蒸', '荆沙甲鱼', '东坡肉'],
-    type: 'chef',
-  },
-  {
-    id: 103,
-    name: '余明社',
-    photo: '/static/exhibit/chef-yu.jpg',
-    bio:
-      '中国烹饪大师，潜江油焖大虾技艺的重要推广者。长期深耕湖北地方风味，擅长将地方食材与传统烹饪技艺结合，对楚菜的地方特色推广有重要贡献。',
-    signatureDishes: ['潜江油焖大虾', '清蒸武昌鱼', '排骨藕汤'],
-    type: 'chef',
-  },
-  {
-    id: 104,
-    name: '邹志平',
-    photo: '/static/exhibit/chef-zou.jpg',
-    bio:
-      '中国烹饪大师，楚菜技艺传承人。长期从事楚菜教学与推广工作，对沔阳三蒸、荆沙甲鱼等传统菜式的标准化制作有深入研究。',
-    signatureDishes: ['沔阳三蒸', '荆沙甲鱼', '黄陂三合'],
-    type: 'chef',
-  },
-  {
-    id: 105,
-    name: '王海东',
-    photo: '/static/exhibit/chef-wang.jpg',
-    bio:
-      '湖北烹饪名师，擅长楚菜传统技法与创新菜式。致力于将楚菜文化融入现代餐饮，多次参与楚菜推广活动。',
-    signatureDishes: ['东坡肉', '珍珠丸子', '红菜薹炒腊肉'],
-    type: 'chef',
-  },
-];
-
-/**
- * 获取展品列表（支持按类型筛选 + 分页）
- * @param {Object} params
- * @param {'dish'|'chef'} [params.type] - 展品类型，不传返回全部
- * @param {number} [params.page=1] - 页码，从 1 开始
- * @param {number} [params.pageSize=10] - 每页条数
- * @returns {Promise<{list: Array, total: number, hasMore: boolean}>}
- */
-export async function getExhibitList({ type, page = 1, pageSize = 10 } = {}) {
-  let source = [];
-  if (type === 'dish') {
-    source = DISHES;
-  } else if (type === 'chef') {
-    source = CHEFS;
-  } else {
-    source = [...DISHES, ...CHEFS];
-  }
-
-  const total = source.length;
-  const start = (page - 1) * pageSize;
-  const end = start + pageSize;
-  const list = source.slice(start, end);
-
-  return {
-    list,
-    total,
-    hasMore: end < total,
-  };
-}
-
-/**
- * 获取单个展品详情
- * @param {number} id - 展品 ID
- * @returns {Promise<Object|null>} 展品完整对象，找不到返回 null
- */
-export async function getExhibitDetail(id) {
-  const all = [...DISHES, ...CHEFS];
-  const item = all.find((it) => it.id === id);
-  return item || null;
-}
+    ingredients: ['猪肉', '糯米
