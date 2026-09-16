@@ -17,8 +17,13 @@
 
 | 路由路径 | 文件 | 所属模块 | 说明 |
 |----------|------|----------|------|
-| `/pages/exhibit/list` | `src/pages/exhibit/list.vue` | exhibit | 菜品/名厨列表页 |
+| `/pages/exhibit/list` | `src/pages/exhibit/list.vue` | exhibit | 菜品/名厨列表页（C2） |
+| `/pages/exhibit/detail` | `src/pages/exhibit/detail.vue` | exhibit | 展品详情页：菜品/名厨详情展示（C3） |
+| `/pages/exhibit/story` | `src/pages/exhibit/story.vue` | exhibit | 菜品故事卡：轮播图、历史典故、制作技艺（C4） |
+| `/pages/shared/components-demo` | `src/pages/shared/components-demo.vue` | shared | 通用组件示例页（A3） |
 | `/pages/social/checkin` | `src/pages/social/checkin.vue` | social | 社交打卡页：选照片、写感想、保存、查看历史记录、分享（F1） |
+| `/pages/lbs/nearby` | `src/pages/lbs/nearby.vue` | lbs | 附近餐厅：按距离排序展示推荐餐厅（E1） |
+| `/pages/lbs/chumap` | `src/pages/lbs/chumap.vue` | lbs | 楚菜地图（筷乐寻楚）：十二时辰时间轴、餐厅列表、详情弹窗、一键导航（H2） |
 | `/pages/user/profile` | `src/pages/user/profile.vue` | user | 个人信息页：展示和编辑用户昵称、头像，支持首次登录和退出登录（B2） |
 
 ### 路由注册规则
