@@ -50,6 +50,20 @@ Restaurant {
 | `formatDistance(km)` | `km: number` | `string` | 距离格式化：小于 1 km 显示"850 m"，大于等于 1 km 显示"1.20 km" |
 | `sortRestaurantsByDistance(restaurants, userLat, userLon)` | 餐厅列表 + 用户坐标 | `Restaurant[]` | 为每条记录补充 `distanceKm` 和 `distanceText` 字段，按距离升序返回，不修改原数组 |
 
+### 时辰数据（domain 层）
+
+文件：`domain/time-slots.js`，纯数据与纯函数，无副作用。
+
+| 导出 | 类型 | 说明 |
+|------|------|------|
+| `TIME_SLOT_LIST` | `TimeSlotInfo[]` | 十二时辰完整信息，含 slot、name、alias、period、startHour |
+| `getCurrentTimeSlot(date)` | `(Date?) => string` | 按真实时间返回对应时辰 slot，支持跨午夜 |
+| `getTimeSlotInfo(slot)` | `(string) => TimeSlotInfo 或 undefined` | 按 slot 查时辰信息 |
+
+页面层使用：
+- `src/pages/lbs/chumap.vue`：楚菜地图主页面，时间轴 + 餐厅列表 + 详情弹窗
+- `src/pages/lbs/components/TimeSlotBar.vue`：时间轴子组件
+
 ## Invariants
 
 - 时辰标识使用拼音（zi/chou/yin/mao/chen/si/wu/wei/shen/you/xu/hai）
