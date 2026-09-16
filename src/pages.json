@@ -42,6 +42,12 @@
       "style": {
         "navigationBarTitleText": "附近餐厅"
       }
+    },
+    {
+      "path": "pages/user/profile",
+      "style": {
+        "navigationBarTitleText": "个人信息"
+      }
     }
   ],
   "globalStyle": {

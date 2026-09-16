@@ -55,10 +55,10 @@
         </view>
       </view>
 
-      <!-- 底部：了解更多 -->
+      <!-- 底部：返回详情 -->
       <view class="footer">
         <uni-icons type="info" size="16" color="#2979ff" />
-        <text class="footer-link" @tap="goDetail">了解更多</text>
+        <text class="footer-link" @tap="goDetail">返回详情</text>
       </view>
 
     </view>
@@ -113,8 +113,10 @@ export default {
   methods: {
     goDetail() {
       if (!this.detail) return;
-      uni.navigateTo({
-        url: `/pages/exhibit/detail?id=${this.detail.id}`,
+      uni.navigateBack({
+        fail() {
+          uni.reLaunch({ url: '/pages/exhibit/list' });
+        },
       });
     },
   },
