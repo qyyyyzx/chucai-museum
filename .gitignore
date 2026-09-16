@@ -42,3 +42,5 @@ tmp/
 # 微信开发者工具
 project.private.config.json
 .aider*
+.claude/
+*.backup
