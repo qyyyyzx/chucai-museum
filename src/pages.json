@@ -50,6 +50,30 @@
       }
     }
   ],
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#2979ff",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/exhibit/list",
+        "text": "展陈"
+      },
+      {
+        "pagePath": "pages/lbs/nearby",
+        "text": "附近"
+      },
+      {
+        "pagePath": "pages/social/checkin",
+        "text": "打卡"
+      },
+      {
+        "pagePath": "pages/user/profile",
+        "text": "我的"
+      }
+    ]
+  },
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "楚菜文化数字博物馆",
