@@ -61,8 +61,9 @@ Restaurant {
 | `getTimeSlotInfo(slot)` | `(string) => TimeSlotInfo 或 undefined` | 按 slot 查时辰信息 |
 
 页面层使用：
-- `src/pages/lbs/chumap.vue`：楚菜地图主页面，时间轴 + 餐厅列表 + 详情弹窗
-- `src/pages/lbs/components/TimeSlotBar.vue`：时间轴子组件
+- `src/pages/lbs/chumap.vue`：楚菜地图主页面，时间轴 + 餐厅列表 + 详情弹窗 + 时辰详情入口
+- `src/pages/lbs/components/TimeSlotBar.vue`：时间轴子组件，卡片右上角 info 图标触发 detail 事件
+- `src/pages/lbs/components/TimeSlotDetail.vue`：时辰文化介绍弹窗，展示 name/alias/period/description，无图时用 themeColor 色块降级
 
 ## Invariants
 
