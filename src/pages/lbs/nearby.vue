@@ -44,20 +44,26 @@
 <script>
 import { lbsApi } from '@/platform/api.js';
 import { sortRestaurantsByDistance } from '@/modules/lbs/domain/distance.js';
+import LoadingState from '@/shared/components/loading-state.vue';
+import ErrorMessage from '@/shared/components/error-message.vue';
 
 export default {
   name: 'NearbyPage',
+  components: {
+    LoadingState,
+    ErrorMessage,
+  },
   data() {
     return {
       /** 是否正在加载 */
-      isLoading: false,
+      isLoading: true,
       /** 错误信息，无错误时为空字符串 */
       errorMsg: '',
       /** 按距离排序后的餐厅列表 */
       list: [],
     };
   },
-  async onLoad() {
+  async onShow() {
     await this.loadData();
   },
   methods: {
