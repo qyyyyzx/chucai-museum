@@ -13,6 +13,11 @@
           :class="{ 'slot-item--active': item.slot === modelValue }"
           @click="handleClick(item.slot)"
         >
+          <!-- info 图标：绝对定位在卡片右上角，点击阻止冒泡并触发 detail emit -->
+          <view class="slot-info-icon" @click.stop="handleDetailClick(item.slot)">
+            <uni-icons type="info" size="14" color="#999999" />
+          </view>
+
           <!-- 上行：名称 + 别名 -->
           <text class="slot-name">{{ item.name }} · {{ item.alias }}</text>
           <!-- 下行：时段 -->
@@ -34,15 +39,21 @@ import { TIME_SLOT_LIST } from '@/modules/lbs/domain/time-slots.js';
  * @description
  * 横向可滚动的时辰选择条，展示十二时辰列表，支持选中态高亮。
  * 数据来自 domain 层的 TIME_SLOT_LIST，不在组件内硬编码。
+ * 每个时辰卡片右上角有 info 图标，点击可触发 detail 事件查看文化介绍。
  *
  * @example
- * <TimeSlotBar :modelValue="currentSlot" @change="onSlotChange" />
+ * <TimeSlotBar
+ *   :modelValue="currentSlot"
+ *   @change="onSlotChange"
+ *   @detail="onSlotDetail"
+ * />
  *
  * @props
  * - modelValue {string} 当前选中的时辰 slot 标识（如 'wu'）
  *
  * @emits
  * - change {string} 用户点击新时辰时触发，参数为新的 slot 字符串
+ * - detail {string} 用户点击时辰卡片右上角 info 图标时触发，参数为对应的 slot 字符串
  */
 export default {
   name: 'TimeSlotBar',
@@ -58,7 +69,7 @@ export default {
     },
   },
 
-  emits: ['change'],
+  emits: ['change', 'detail'],
 
   data() {
     return {
@@ -81,6 +92,16 @@ export default {
         return;
       }
       this.$emit('change', slot);
+    },
+
+    /**
+     * 处理 info 图标点击事件
+     * 触发 detail 事件通知父组件打开时辰文化介绍弹窗
+     * 图标上已通过 @click.stop 阻止冒泡，不会同时触发卡片的 change 事件
+     * @param {string} slot - 被点击的时辰 slot 标识
+     */
+    handleDetailClick(slot) {
+      this.$emit('detail', slot);
     },
   },
 };
@@ -117,6 +138,15 @@ export default {
   padding: 20rpx 24rpx 16rpx;
   position: relative;
   min-width: 160rpx;
+  cursor: pointer;
+}
+
+/* info 图标容器：绝对定位在卡片右上角 */
+.slot-info-icon {
+  position: absolute;
+  top: 8rpx;
+  right: 8rpx;
+  padding: 8rpx;
   cursor: pointer;
 }
 
