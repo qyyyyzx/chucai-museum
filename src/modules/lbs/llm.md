@@ -74,9 +74,12 @@ Restaurant {
 
 ## Tests
 
-- 数据模型验证函数需写单测（H1 负责）
-- 距离计算函数单测放在 `tests/modules/lbs/distance.test.js`（E1 已完成）
-- 测试文件放在 `tests/modules/lbs/`
+## Tests
+
+- 数据模型验证函数单测：`tests/modules/lbs/restaurant.test.js`（H1）
+- 距离计算函数单测：`tests/modules/lbs/distance.test.js`（E1）
+- 时辰数据函数单测：`tests/modules/lbs/time-slots.test.js`（H2）
+- 测试文件统一放在 `tests/modules/lbs/`
 
 ## Change Protocol
 
