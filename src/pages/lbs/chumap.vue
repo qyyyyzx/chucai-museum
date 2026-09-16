@@ -26,6 +26,7 @@
           v-for="item in restaurants"
           :key="item.id"
           class="card"
+          @click="openDetail(item)"
         >
           <!-- 卡片头部：餐厅名称 + 距离 -->
           <view class="card-header">
@@ -53,7 +54,70 @@
       </view>
     </view>
 
-    <!-- 底部留空（Step 4 加详情弹窗） -->
+    <!-- 餐厅详情弹窗（从底部滑出） -->
+    <uni-popup
+      ref="popup"
+      type="bottom"
+      :safe-area="false"
+      @maskClick="closeDetail"
+    >
+      <view class="popup-card">
+        <!-- 弹窗顶部：餐厅名称 + 关闭按钮 -->
+        <view class="popup-header">
+          <text class="popup-name">
+            {{ selectedRestaurant ? selectedRestaurant.name : '' }}
+          </text>
+          <uni-icons
+            type="close"
+            size="24"
+            color="#666666"
+            class="popup-close"
+            @click="closeDetail"
+          />
+        </view>
+
+        <!-- 弹窗内容，仅在数据就绪时渲染 -->
+        <view v-if="popupVisible && selectedRestaurant">
+          <!-- 地址行 -->
+          <view class="popup-row">
+            <text class="popup-label">地址</text>
+            <text class="popup-value">{{ selectedRestaurant.address }}</text>
+          </view>
+
+          <!-- 营业时间行 -->
+          <view class="popup-row">
+            <text class="popup-label">营业时间</text>
+            <text class="popup-value">
+              {{ selectedRestaurant.businessHours.open }} - {{ selectedRestaurant.businessHours.close }}
+              <text v-if="selectedRestaurant.businessHours.remark" class="popup-remark">
+                （{{ selectedRestaurant.businessHours.remark }}）
+              </text>
+            </text>
+          </view>
+
+          <!-- 招牌菜品区（全部展示） -->
+          <view class="popup-row popup-row--wrap">
+            <text class="popup-label">招牌菜品</text>
+            <view class="popup-tags">
+              <uni-tag
+                v-for="(dish, index) in selectedRestaurant.signatureDishes"
+                :key="index"
+                :text="dish"
+                type="default"
+                size="normal"
+              />
+            </view>
+          </view>
+        </view>
+
+        <!-- 底部一键导航按钮 -->
+        <view class="popup-footer">
+          <view class="navigate-btn" @click="handleNavigate">
+            <text class="navigate-btn-text">一键导航</text>
+          </view>
+        </view>
+      </view>
+    </uni-popup>
   </view>
 </template>
 
@@ -68,15 +132,10 @@ import ErrorMessage from '@/shared/components/error-message.vue';
 /**
  * 楚菜地图主页面 - 筷乐寻楚
  *
- * @description
- * 以荆州十二时辰为时间轴，展示对应时段的推荐餐厅。
- * 页面结构分三层：
+ * 页面结构：
  * - 顶部：TimeSlotBar 时间轴（时辰切换）
  * - 主体：餐厅列表（按距离排序，含加载/错误/空状态）
- * - 底部：餐厅详情弹窗（Step 4 实现）
- *
- * 用户位置在首次加载时获取并缓存到 userLocation，
- * 切换时辰时复用缓存坐标，不重复调用定位接口。
+ * - 底部：餐厅详情弹窗（uni-popup，含一键导航）
  */
 export default {
   name: 'ChumapPage',
@@ -89,39 +148,30 @@ export default {
 
   data() {
     return {
-      /**
-       * 当前选中的时辰 slot 标识
-       * 初始值由 getCurrentTimeSlot() 根据真实时间计算得出
-       * @type {string}
-       */
+      /** 当前选中的时辰 slot 标识 */
       selectedSlot: getCurrentTimeSlot(),
 
-      /** 是否正在加载（初始为 true，避免闪现空状态） */
+      /** 是否正在加载（初始 true 避免闪空状态） */
       isLoading: true,
 
       /** 错误信息，无错误时为空字符串 */
       errorMsg: '',
 
-      /**
-       * 当前时辰的餐厅列表，每项已附带 distanceKm 和 distanceText 字段
-       * @type {Array}
-       */
+      /** 当前时辰的餐厅列表，每项已附带 distanceKm 和 distanceText */
       restaurants: [],
 
-      /**
-       * 缓存的用户位置坐标，首次获取后复用，避免切换时辰时重复定位
-       * @type {{ latitude: number, longitude: number } | null}
-       */
+      /** 缓存的用户位置坐标，避免切换时辰时重复定位 */
       userLocation: null,
+
+      /** 弹窗中当前展示的餐厅对象 */
+      selectedRestaurant: null,
+
+      /** 弹窗内容是否可渲染（与动画解耦，避免关闭时属性访问报错） */
+      popupVisible: false,
     };
   },
 
   async onShow() {
-    /**
-     * 每次页面显示时刷新当前时辰，并重新加载对应餐厅列表。
-     * 场景：用户切到其他 tab 停留后返回，若跨越时辰边界则自动更新。
-     * 注意：userLocation 不在此处清空，位置缓存跨 onShow 保持有效。
-     */
     this.selectedSlot = getCurrentTimeSlot();
     await this.loadRestaurants(this.selectedSlot);
   },
@@ -129,21 +179,13 @@ export default {
   methods: {
     /**
      * 加载指定时辰的餐厅列表
-     *
-     * 流程：
-     * 1. 若 userLocation 为空，先调用 lbsApi.getCurrentLocation() 获取并缓存
-     * 2. 调用 lbsApi.getRestaurantsByTimeSlot(slot) 获取该时辰餐厅
-     * 3. 用 sortRestaurantsByDistance 为每条记录附加距离字段并按距离升序排序
-     * 4. 赋值给 this.restaurants
-     *
-     * @param {string} slot - 时辰 slot 标识（如 'wu'）
+     * @param {string} slot - 时辰 slot 标识
      */
     async loadRestaurants(slot) {
       this.isLoading = true;
       this.errorMsg = '';
 
       try {
-        // 首次加载时获取用户位置并缓存，后续切换时辰复用
         if (!this.userLocation) {
           this.userLocation = await lbsApi.getCurrentLocation();
         }
@@ -163,8 +205,8 @@ export default {
     },
 
     /**
-     * 处理时间轴时辰切换事件
-     * @param {string} slot - 新选中的时辰 slot 标识
+     * 时间轴切换时辰
+     * @param {string} slot - 新选中的时辰 slot
      */
     async onSlotChange(slot) {
       this.selectedSlot = slot;
@@ -172,15 +214,53 @@ export default {
     },
 
     /**
-     * 取招牌菜品前 2 道，拼接为顿号分隔的字符串
-     * @param {string[]} dishes - 招牌菜品数组
-     * @returns {string} 格式化后的菜品字符串，无数据时返回"暂无"
+     * 取招牌菜品前 2 道拼接为字符串
+     * @param {string[]} dishes
+     * @returns {string}
      */
     getTopDishes(dishes) {
       if (!Array.isArray(dishes) || dishes.length === 0) {
         return '暂无';
       }
       return dishes.slice(0, 2).join('、');
+    },
+
+    /**
+     * 打开餐厅详情弹窗
+     * @param {Object} item - 餐厅对象
+     */
+    openDetail(item) {
+      this.selectedRestaurant = item;
+      this.popupVisible = true;
+      this.$refs.popup.open();
+    },
+
+    /**
+     * 关闭弹窗
+     */
+    closeDetail() {
+      this.$refs.popup.close();
+      this.popupVisible = false;
+      setTimeout(() => {
+        this.selectedRestaurant = null;
+      }, 300);
+    },
+
+    /**
+     * 一键导航：调用系统地图
+     */
+    handleNavigate() {
+      if (!this.selectedRestaurant) {
+        return;
+      }
+      const { coordinates, name, address } = this.selectedRestaurant;
+      uni.openLocation({
+        latitude: coordinates.latitude,
+        longitude: coordinates.longitude,
+        name,
+        address,
+        scale: 18,
+      });
     },
   },
 };
@@ -202,7 +282,7 @@ export default {
   box-sizing: border-box;
 }
 
-/* 空状态：居中显示图标和提示文字 */
+/* 空状态 */
 .empty-state {
   display: flex;
   flex-direction: column;
@@ -217,14 +297,14 @@ export default {
   color: #999999;
 }
 
-/* 餐厅列表：纵向排列，卡片之间留间距 */
+/* 餐厅列表 */
 .list-wrap {
   display: flex;
   flex-direction: column;
   gap: 20rpx;
 }
 
-/* 餐厅卡片：白底、圆角、阴影 */
+/* 餐厅卡片 */
 .card {
   background-color: #ffffff;
   border-radius: 16rpx;
@@ -232,7 +312,6 @@ export default {
   box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
 }
 
-/* 卡片头部：名称左对齐，距离右对齐 */
 .card-header {
   display: flex;
   justify-content: space-between;
@@ -254,7 +333,6 @@ export default {
   white-space: nowrap;
 }
 
-/* 卡片信息行：标签 + 内容 */
 .card-row {
   display: flex;
   align-items: flex-start;
@@ -274,9 +352,95 @@ export default {
   flex: 1;
 }
 
-/* 营业时间备注：颜色更浅，区别于主要时段 */
 .card-remark {
   font-size: 24rpx;
   color: #aaaaaa;
+}
+
+/* ========== 弹窗样式 ========== */
+.popup-card {
+  background-color: #ffffff;
+  border-radius: 24rpx 24rpx 0 0;
+  padding: 32rpx;
+  max-height: 70vh;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 24rpx;
+  border-bottom: 1rpx solid #eeeeee;
+}
+
+.popup-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+  flex: 1;
+  padding-right: 16rpx;
+}
+
+.popup-close {
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.popup-row {
+  display: flex;
+  align-items: flex-start;
+  margin-top: 24rpx;
+}
+
+.popup-row--wrap {
+  align-items: flex-start;
+}
+
+.popup-label {
+  font-size: 28rpx;
+  color: #999999;
+  width: 160rpx;
+  flex-shrink: 0;
+}
+
+.popup-value {
+  font-size: 28rpx;
+  color: #333333;
+  flex: 1;
+  line-height: 1.6;
+}
+
+.popup-remark {
+  font-size: 24rpx;
+  color: #aaaaaa;
+}
+
+.popup-tags {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+}
+
+.popup-footer {
+  margin-top: 40rpx;
+}
+
+.navigate-btn {
+  width: 100%;
+  height: 88rpx;
+  background-color: #2979ff;
+  border-radius: 12rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navigate-btn-text {
+  font-size: 30rpx;
+  color: #ffffff;
+  font-weight: bold;
 }
 </style>
