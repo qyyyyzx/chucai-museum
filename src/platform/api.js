@@ -15,11 +15,20 @@ import * as lbsMock from './mock/lbs.js';
 import * as userMock from './mock/user.js';
 
 /**
- * 判断当前是否运行在 H5 环境
+ * 判断当前是否使用 H5 mock 数据层。
+ *
+ * 【临时方案】D2 微信云函数接入前，H5 端与小程序端统一走 mock 数据层，
+ * 保证两端都能用假数据演示。原因是小程序端没有 localStorage，
+ * 原判断会走 cloudNotReady 抛错。
+ *
+ * 【D2 接入后应改回】：
+ *   return typeof localStorage !== 'undefined';
+ * 并让小程序端走 platform/cloud/ 下的云函数实现。
+ *
  * @returns {boolean}
  */
 function isH5() {
-  return typeof localStorage !== 'undefined';
+  return true;
 }
 
 /**

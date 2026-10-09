@@ -15,7 +15,7 @@ const STORAGE_KEY = 'chucai_social_checkins';
  */
 function loadAll() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = uni.getStorageSync(STORAGE_KEY);
     if (!raw) {
       return [];
     }
@@ -33,7 +33,7 @@ function loadAll() {
  */
 function saveAll(list) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(list));
+    uni.setStorageSync(STORAGE_KEY, JSON.stringify(list));
   } catch (error) {
     // 存储写入失败（如超出容量）时静默降级，保住页面可用；本次改动会丢失
   }

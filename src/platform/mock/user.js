@@ -29,7 +29,7 @@ function nextAutoId() {
  */
 function saveToStorage(user) {
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(user));
+    uni.setStorageSync(STORAGE_KEY, JSON.stringify(user));
   } catch (error) {
     // 存储写入失败（如超出容量）时静默降级，保住页面可用
   }
@@ -41,7 +41,7 @@ function saveToStorage(user) {
  */
 function loadFromStorage() {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
+    const raw = uni.getStorageSync(STORAGE_KEY);
     if (!raw) {
       return null;
     }
@@ -85,7 +85,7 @@ export async function login({ code: _code, nickname, avatar } = {}) {
  */
 export async function logout() {
   try {
-    localStorage.removeItem(STORAGE_KEY);
+    uni.removeStorageSync(STORAGE_KEY);
   } catch (error) {
     // 删除失败时静默降级
   }
